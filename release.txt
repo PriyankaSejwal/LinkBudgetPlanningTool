@@ -1,0 +1,47 @@
+1. ADDITION OF NEW RADIO WITH ITS SENSITIVITY TABLE
+	A container with a form is created where user will enter the data for the new radio.
+    This container will be visible when plus sign beside the Link Summary is clicked.
+    In the new radio form we need to enter the details of gain, transmit power for the radio, also user need to tell
+    whether they want sensitivity table till mcs 9 or 11 by selecting from a dropdown.
+    As the selection is made from dropdowntables for 20, 40 and 80 MHz are created .
+    in the tables user need to provide the sensitivity for each mcs and the throughput.
+    after entering the details user clicks on "Add New Radio" button
+    The form willl be closed and the ptp page will be visible with extended menu of the radios.
+    The sensitivity tables are also available in the table containers(not visible to users).
+    CHANGES IN FILES: 
+        ptp.html - new form created , radio dropdown options value now gain and tx power
+        functionalititesptp.js - 
+            1. radio event listener function changed, checkBandwisth() changed, 
+            calcTxPower changed, deviceinfo() changed. 
+            2. new function created namely "checkRadios()",
+            3. function checkRadios() called in function ptpctryChange() under file ctrySelect.js().
+    NEWLY ADDED FILES:
+            1. newRadio.js
+            2. newRadioValidation.js 
+            3. newRadio.css
+            
+                    
+
+2. FADE MARGIN CALCULATIONS
+    Previously Fade Margin was calculated based on the sensitivity of the table of bandwidth table and the RSL.
+    Now, We will ask user for the Bandwidth that they want to recieve say 100 Mbps.
+    Based on the bandwidth we check the throughput from the table for the match and extract the rsl value from 
+    that row.
+    Now, a calculated rsl is also there. Difference of the calculated rsl and the rsl based on user bandwidth is
+    Fade Margin.
+    FADE MARGIN - The amount by which a received signal level may be reduced without causing system performance 
+    to fall below a specified threshold value. It is mainly used to describe a communication system such as satellite, 
+    for example a system like globalstar operates at 25-35 dB Fade margin.
+    CHANGES IN FILES:
+    NEW FILES: newfademargin.js
+
+3. VALIDATIONS DONE FOR NEW RADIO ADDITION
+    1. All values entered in the table must be non-empty.
+    2. The Max column which is there in all the ubax/ub22 tables need to be eliminated.
+    3. Validation for throughput. The throughput entered in row 2 must be greater than the
+    throughput entered in row 1 of the table.
+    4.  The Radio Name must not collide with the radio names of the existing radios.
+    5. When radio details are submitted reset the input fields and delete the tables created for th 20, 40 and 80
+    bandwidth.
+    6. The previously existing table for ubax and ub22 have min/max of rsl in each row. New tables that are added
+    just have the minimum rsl required to lock to that mcs. Need to bring the tables in line with one another.
