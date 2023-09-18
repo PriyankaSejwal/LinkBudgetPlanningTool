@@ -19,7 +19,7 @@ $("#subscribedBandwidth").on("change", function () {
   //  all the link summary table data would be empty
 
   if (matchedRow) {
-    $("#subscribedBandwidthAlert").hide();
+    $(".subscribedBandwidthAlert").hide();
     var latLngA = $("#searchtower1").val();
     var latLngB = $("#searchtower2").val();
     var distance = $("#linkDistance").html();
