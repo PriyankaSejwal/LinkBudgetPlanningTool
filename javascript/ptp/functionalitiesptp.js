@@ -1,11 +1,12 @@
+// when the calculate button is clicked
 $("#latLongBtn").click(function () {
-  console.log("latlngBtn pressed");
+  $(".subscribedBandwidthAlert").fadeOut();
   var subscriberBw = $("#subscribedBandwidth").val();
-  if (subscriberBw != "") {
+  if (subscriberBw != "" && matchedRow) {
     $(".emptySubscriberBwAlert").fadeOut();
-    hopazimuth();
-    calcFresnel();
-    deviceinfo();
+    // hopazimuth();
+    // calcFresnel();
+    // deviceinfo();
     inputMarker();
   } else {
     $(".emptySubscriberBwAlert").fadeIn().delay("slow");
@@ -25,24 +26,6 @@ for (let i = 1; i <= 2; i++) {
       // extracting the name/type and family of the radio
       var radioType1 = $("#radio1 option:selected").attr("class");
       var radioType2 = $("#radio2 option:selected").attr("class");
-      // var radioFamily1 = $("#radio1 option:selected").parent().prop("label");
-      // var radioFamily2 = $("#radio2 option:selected").parent().prop("label");
-      // function called which will update the mcs table container to be used further
-      // var tablecontainer;
-      // // if not under custom radio then check if they fall in ub22 or ubax family to decide the table div to use
-      // if (eval(`radioFamily` + i) != "Custom Radio") {
-      //   if (eval(`radioType` + i).includes("4l")) {
-      //     tablecontainer = "ub22-table";
-      //   } else {
-      //     tablecontainer = "ubax-table";
-      //   }
-      // } else {
-      //   tablecontainer = eval(`radioType` + i) + "-table";
-      // }
-      // tablecontainerArray[i - 1] = tablecontainer;
-      // next check for the radios if they fall in same family or not
-      // if any of the radio is from custom group then no restrictions of the radio family
-      // if the radios from either ub22 or ubax then they must be restricted on one family selection
 
       if (radioType1 == radioType2) {
         // function called to refer the mcs table
@@ -113,7 +96,6 @@ function rad2deg(rad) {
 //LINK DISTANCE AND AZIMUTH ANGLE
 // function to calculate link distance, azimuth angle
 function hopazimuth() {
-  console.log("hopazimuth called");
   var arr = document.getElementsByClassName("towerinput");
   var latlongarr = [];
   Array.from(arr).forEach(function (e) {
@@ -206,21 +188,6 @@ function checkBandwidth() {
 var tablecontainer;
 function checkRadios() {
   var radioType1 = $("#radio1 option:selected").attr("class");
-  // var radioType2 = $("#radio2 option:selected").attr("class");
-  // var radioFamily1 = $("#radio1 option:selected").parent().attr("label");
-  // var radioFamily2 = $("#radio2 option:selected").parent().attr("label");
-  // array that will hold the table containers to be used for particular radios
-  // for (let i = 1; i <= 2; i++) {
-  //   if (eval(`radioFamily` + i) != "Custom Radio") {
-  //     /* if family - ub22 so table class name ub22-table else it is ubax-table
-  //   if the radio doesnot belong to Custom Radio group else if radio belongs
-  //   to custom radio group then the class name of the table container is radioName + -table */
-  //     tablecontainer = eval(`radioType` + i) + "-table";
-  //   } else {
-  //     tablecontainer = radioName + "-table";
-  //   }
-  //   tablecontainerArray[i - 1] = tablecontainer;
-  // }
   // table for reference
   tablecontainer = radioType1 + "-table";
   // check bandwidth and the bandwidth based table
@@ -233,50 +200,78 @@ function calcFresnel() {
   document.getElementById("reportfrequency").innerHTML = f.value;
 
   // Calculating fresnel zone radius
-  var distance = parseFloat(document.getElementById("linkDistance").innerHTML);
-  var fres = (17.32 * Math.sqrt(distance / ((4 * cf) / 1000))).toFixed(2);
-  // var fres = (fres * 60) / 100;
+  var distance = document.getElementById("linkDistance").innerHTML;
+  if (distance) {
+    var fres = (17.32 * Math.sqrt(distance / ((4 * cf) / 1000))).toFixed(2);
+    // var fres = (fres * 60) / 100;
 
-  // Populating value of fresnel radius
-  $(`#fresnelRadius`).html(fres);
-  $(`#reportfresradius`).html(fres);
+    // Populating value of fresnel radius
+    $(`#fresnelRadius`).html(fres);
+    $(`#reportfresradius`).html(fres);
+  }
 }
 
 // function to calculate the max transmit power based on eirp and antenna gain
 var maxTxArray = [];
 function calcTxPower() {
   var eirp = parseInt($("#ptpeirpMax").val());
-
-  for (let i = 1; i <= 2; i++) {
-    var [antgain, allowedTx] = $(`#radio${i}`).val().split(",");
-    allowedTx = parseFloat(allowedTx);
-    antgain = parseFloat(antgain);
-    var cableloss = parseInt($(`#cableLoss${i}`).val());
-    // comparing the allowed tx as per the radi with the maxtx based on the country and the bandwidth
-    var maxtx = txlimitctrybased > allowedTx ? allowedTx : txlimitctrybased;
-    console.log(
-      "The information about the ant gain, allowed transmit power as per radio, max tx as per ctry and radio:",
-      antgain,
-      allowedTx,
-      maxtx
+  // mcs based tx power
+  if (matchedRow) {
+    var mcsbasedtxpower = parseInt(
+      referencetable1.rows[matchedRow].cells.item(7).innerHTML
     );
+    for (let i = 1; i <= 2; i++) {
+      var [antgain, allowedTx] = $(`#radio${i}`).val().split(",");
+      // allowed transmit power based on our product family ub22/ubax
+      allowedTx = parseFloat(allowedTx);
+      antgain = parseFloat(antgain);
+      var cableloss = parseInt($(`#cableLoss${i}`).val());
+      // comparing the allowed tx as per the radi with the maxtx based on the country and the bandwidth
+      var maxtx = Math.min(txlimitctrybased, mcsbasedtxpower, allowedTx);
+      console.log(
+        "The information about max tx as per ctry, as per the mcs, as per the radio model, and the minimum of all the two",
+        txlimitctrybased,
+        mcsbasedtxpower,
+        allowedTx,
+        maxtx
+      );
 
-    // Calculated tx power for A B sites
-    var tx = eirp - antgain + cableloss;
+      // Calculated tx power for A B sites
+      var tx = eirp - antgain + cableloss;
 
-    if (tx < 3) {
-      $(`.tx${i}Alert`).show();
-    } else {
-      $(`.tx${i}Alert`).hide();
-      // tx power for calculation
+      if (tx < 3) {
+        $(`.tx${i}Alert`).show();
+      } else {
+        $(`.tx${i}Alert`).hide();
+        // tx power for calculation
 
-      tx = tx > maxtx ? maxtx : tx;
-      $(`#transmitPower${i}`).val(tx);
-      $(`#transmitPower${i}`).prop("max", tx);
-      maxTxArray[i] = tx;
+        tx = tx > maxtx ? maxtx : tx;
+        $(`#transmitPower${i}`).val(tx);
+        // setting the max attribute as the max tx calculated
+        $(`#transmitPower${i}`).prop("max", tx);
+        maxTxArray[i] = tx;
+      }
     }
+    deviceinfo();
+  } else {
+    window.alert("The subscirber bandwidth is required to go ahead.");
   }
-  deviceinfo();
+}
+
+function updateTransmitPower(index) {
+  var eirp = parseFloat($("#ptpeirpMax").val());
+  var antennaGain = parseFloat($(`#gain${index}`).val());
+  var cableLoss = parseFloat($(`#cableLoss${index}`).val());
+  var transmitPower = parseFloat($(`#transmitPower${index}`).val());
+
+  var txcalculated = eirp - antennaGain + cableLoss;
+  if (txcalculated < maxTxArrayrray[index - 1]) {
+    if (txcalculated < transmitPower) {
+      $(`#transmitPower${index}`).val(txcalculated);
+    }
+    $(`#transmitPower${index}`.prop("max", txcalculated));
+    maxTxArray[index - 1] = txcalculated;
+  }
 }
 
 // Qeury Selector for when user changes the tx power, checking whether tx falls in 3-27.
@@ -334,70 +329,166 @@ function deviceinfo() {
     var loss2 = parseInt(document.getElementById("cableLoss2").value);
     var gain1 = parseInt(document.getElementById("radio1").value.split(",")[0]);
     var gain2 = parseInt(document.getElementById("radio2").value.split(",")[0]);
+    var tx1 = parseInt($("#transmitPower1").val());
+    var tx2 = parseInt($("#transmitPower2").val());
+    // the interference if added by the user then noise floor becomes equal to the interference
+    var interference = $("#interference-val").val();
+    if (interference) {
+      noisefloor = interference;
+    }
+    var snrMatched;
+    var rslMatched;
+
     // data from the reference table with the matched row for the throughput
     var refertable = referencetable1;
-    var sensitivity = refertable.rows[matchedRow].cells.item(0).innerHTML;
-    var mcs = refertable.rows[matchedRow].cells.item(1).innerHTML;
-    var modulation = refertable.rows[matchedRow].cells.item(2).innerHTML;
-    var fec = refertable.rows[matchedRow].cells.item(3).innerHTML;
-    var linkrate = refertable.rows[matchedRow].cells.item(4).innerHTML;
-    var throughput = parseInt(
-      refertable.rows[matchedRow].cells.item(5).innerHTML
+    var sensitivity = parseFloat(
+      refertable.rows[matchedRow].cells.item(0).innerHTML
     );
-    var txpower = parseInt(refertable.rows[matchedRow].cells.item(6).innerHTML);
+    var minSNR = parseInt(refertable.rows[matchedRow].cells.item(1).innerHTML);
+    var mcs = refertable.rows[matchedRow].cells.item(2).innerHTML;
+    var modulation = refertable.rows[matchedRow].cells.item(3).innerHTML;
+    var fec = refertable.rows[matchedRow].cells.item(4).innerHTML;
+    var linkrate = refertable.rows[matchedRow].cells.item(5).innerHTML;
+    var throughput = parseInt(
+      refertable.rows[matchedRow].cells.item(6).innerHTML
+    );
+    var txpower = parseInt(refertable.rows[matchedRow].cells.item(7).innerHTML);
     console.log(
       "In function device info: tx power is ",
       txpower,
       "at mcs: ",
-      mcs
+      mcs,
+      "with throughput",
+      throughput,
+      "interference entered or noise floor considered is :",
+      noisefloor
     );
-    var eirpval = gain1 + gain2 + txpower - loss1 - loss2;
-    var rsl = (
-      eirpval -
-      (20 * Math.log10(dist) + 20 * Math.log10(freq / 1000) + 92.45)
-    ).toFixed(2);
-    // SNR
-    var snr = (parseFloat(rsl) + parseFloat(noisefloor)).toFixed(2);
-    // Fade Margin
-    var fademargin = (parseFloat(rsl) - parseFloat(sensitivity)).toFixed(2);
 
-    // console.log("after the values of mcs");
+    var eirpval = [
+      gain1 + gain2 + tx2 - loss1 - loss2,
+      gain1 + gain2 + tx1 - loss1 - loss2,
+    ];
     for (let i = 1; i <= 2; i++) {
+      var rsl = (
+        eirpval[i - 1] -
+        (20 * Math.log10(dist) + 20 * Math.log10(freq / 1000) + 92.45)
+      ).toFixed(2);
+
+      // SNR
+      var snrcalculated = (parseFloat(rsl) + parseFloat(noisefloor)).toFixed(2);
+      // Fade Margin
+      var fademargin = (parseFloat(rsl) - parseFloat(sensitivity)).toFixed(2);
       var radioName = $(`#radio${i} option:selected`).html();
       // Populating the link setting values
       $(`#reportRadio${i}`).html(radioName);
       $(`#reportloss${i}`).html(eval("loss" + i));
       $(`#reporttx${i}`).html(txpower);
       $(`#reportAntGain${i}`).html(eval("gain" + i));
-
       // Populating all the calculated value now in the fields
       // RSL
       document.getElementById(`rsl${i}`).innerHTML = rsl;
       document.getElementById(`reportrsl${i}`).innerHTML = rsl;
       // SNR
-      $(`#snr${i}`).html(snr);
-      $(`#reportsnr${i}`).html(snr);
+      $(`#snr${i}`).html(snrcalculated);
+      $(`#reportsnr${i}`).html(snrcalculated);
       // Fade Margin
       $(`#fadeMargin${i}`).html(fademargin);
-      // MCS
-      $(`#mcs${i}`).html(mcs);
-      // Modulation
-      $(`#modulation${i}`).html(modulation);
-      // FEC
-      $(`#fec${i}`).html("'" + fec + "'");
-      // Link Rate
-      $(`#linkRate${i}`).html(linkrate);
-      // Throughput
-      $(`#throughput${i}`).html(throughput);
-      $(`#reportthroughput${i}`).html(throughput);
 
-      if (radioName.includes("CPE") && throughput > 300) {
-        $(`#throughput${i}`).html(150);
-        $(`#reportthroughput${i}`).html(150);
-        //   }
+      // console.log("after the values of mcs");
+      console.log(
+        "snr calculated is:",
+        snrcalculated,
+        "and min snr value is :",
+        minSNR
+      );
+      if (rsl >= sensitivity) {
+        console.log(
+          `In loop ${i} Rsl caluclated is ${rsl} and sensitivity is ${sensitivity}`
+        );
+        rslMatched = true;
       }
-      console.log("going to availability");
-      availability();
+      if (snrcalculated >= minSNR) {
+        console.log(
+          `In loop ${i} SNR calculated is ${snrcalculated} and min snr is ${minSNR}`
+        );
+        snrMatched = true;
+      }
+    }
+    if (rslMatched) {
+      console.log(
+        `RSL value matched for Site${i} with calculated rsl and sensitivity as:`,
+        rsl,
+        sensitivity
+      );
+      if (snrMatched) {
+        console.log(
+          `SNR matched for Site${i} with calculated snr and min snr as: `,
+          snrcalculated,
+          minSNR
+        );
+        for (let i = 1; i <= 2; i++) {
+          // MCS
+          $(`#mcs${i}`).html(mcs);
+          // Modulation
+          $(`#modulation${i}`).html(modulation);
+          // FEC
+          $(`#fec${i}`).html("'" + fec + "'");
+          // Link Rate
+          $(`#linkRate${i}`).html(linkrate);
+          // Throughput
+          $(`#throughput${i}`).html(throughput / 2);
+          $(`#reportthroughput${i}`).html(throughput / 2);
+
+          if (radioName.includes("CPE") && throughput > 300) {
+            $(`#throughput${i}`).html(150);
+            $(`#reportthroughput${i}`).html(150);
+            //   }
+          }
+        }
+        availability();
+      } else {
+        //when calculated snr is not smaller than minSNR, snr is not matched with the criteria
+        var tablelength = refertable.rows.length;
+        for (let t = 1; t < tablelength; t++) {
+          var minSNR = parseInt(refertable.rows[t].cells.item(1).innerHTML);
+          if (minSNR > snrcalculated) {
+            console.log(
+              "Minimum snr as per mcs is:",
+              minSNR,
+              "& the calculated snr is: ",
+              snrcalculated
+            );
+            var throughput = refertable.rows[t].cells.item(6).innerHTML;
+            window.alert(
+              `At row number ${i}, With ${snrcalculated}dB SNR, we can achieve maximum ${throughput}Mbps.`
+            );
+            // removing the calculations from the link summary table
+            // empty = document.querySelectorAll(".empty");
+            // for (let j = 0; j < empty.length; j++) {
+            //   empty[j].innerHTML = "";
+            // }
+            break;
+          }
+        }
+      }
+    } else {
+      // when calculated rsl is not smaller than sensitivity, rsl is not matched with the min snr criteria
+      var tablelength = refertable.rows.length;
+      for (let t = 1; t < tablecontainer.length; t++) {
+        var sensitivity = parseInt(refertable.rows[t].cells.item(0).innerHTML);
+        if (sensitivity > rsl) {
+          console.log("Sensitivity:", sensitivty, "& RSL", rsl);
+          var throughput = refertable.rows[t].cells.item(6).innerHTML;
+          window.alert(
+            `At row number ${i}, With ${rsl}dBm RSL, we can achieve maximum ${throughput}Mbps.`
+          );
+          // empty = document.querySelectorAll(".empty");
+          // for(let j=0; j<empty.length; j++){
+          //   empty[j].innerHTML = "";
+          // }
+          break;
+        }
+      }
     }
   }
 }
@@ -445,15 +536,6 @@ function availability() {
 
   var linkAvailability = 100 * (1 - 2 * outageDueToFading);
   console.log("fading occurance factor", linkAvailability);
-  // console.log("link Availability: ", link_availability_due_to_multipath);
-
-  // To be deleted
-  // console.log(path_inclination);
-  // console.log(flat_fade_margin);
-  // console.log(fading_occurance_factor);
-  // console.log(fade_depth);
-  // console.log(flat_fade_exceeded_in_WM);
-  // console.log(link_availability_due_to_multipath);
 
   //  populating the link availability column with the value calculated
   document.getElementById("reportlinkAvailability").innerHTML =

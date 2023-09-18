@@ -73,6 +73,10 @@ input:hover {
   background-color: #e7f2f7;
   color: #54585a;
 }
+/* the interference container to have display none */
+.interference-container {
+  display: none;
+}
 /* the button calculate which is disbaled till lat long entered for both sides */
 .validate-section {
   text-align: center !important;

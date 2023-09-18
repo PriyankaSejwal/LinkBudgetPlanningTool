@@ -18,6 +18,20 @@ function initMap() {
   elevator = new google.maps.ElevationService();
 }
 
+// function which places marker when map is clicked
+function addMarkerInPTMP(index, id, idDD, location) {
+  console.log(index, id, location.lat());
+  var latlngField = $(`#${id}`);
+  latlngField.val(location.lat().toFixed(6) + "," + location.lng().toFixed(6));
+  var latlngDDField = $(`#${idDD}`);
+  latlngDDField.val(location.lat() + "," + location.lng());
+  // marker[index - 1] = new google.maps.Marker({
+  //   map: map,
+  //   position: location,
+  //   icon: `images/${index - 1}.png`,
+  // });
+}
+
 function placeMasterOnMap() {
   masterAzimuthArray = [];
   var masterVal = $("#masterCoord").val();
@@ -30,6 +44,9 @@ function placeMasterOnMap() {
       }
       // function which confirms whether lat lng of Master belongs to the selected country
       checkMasterFormat(masterCoord[0], masterCoord[1]);
+    }
+  } else if ((masterVal = "")) {
+    if (marker[0] != undefined) {
     }
   }
 }

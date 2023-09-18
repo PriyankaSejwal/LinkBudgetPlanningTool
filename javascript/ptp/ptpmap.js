@@ -33,12 +33,19 @@ function ptpMap() {
   });
   // event listener on the map when map is clicked
   ptpmap.addListener("click", function (e) {
-    if (ptpmarkersarr.length < 2) {
-      addMarker(e.latLng);
-    }
-    if (ptpmarkersarr.length == 2) {
-      addMarkerToReport();
-      addAddress();
+    var subscriberBandwidth = $("#subscribedBandwidth").val();
+    if (subscriberBandwidth) {
+      $(".emptySubscriberBwAlert").fadeOut();
+      if (ptpmarkersarr.length < 2) {
+        addMarker(e.latLng);
+
+        if (ptpmarkersarr.length == 2) {
+          addMarkerToReport();
+          addAddress();
+        }
+      }
+    } else {
+      $(".emptySubscriberBwAlert").fadeIn();
     }
   });
 
@@ -266,9 +273,9 @@ function drawPolyline() {
   });
 
   // window.alert("length 2");
-  // hopazimuth();
-  // calcFresnel();
-  // deviceinfo();
+  hopazimuth();
+  calcFresnel();
+  deviceinfo();
 
   ptpelevator
     .getElevationAlongPath({

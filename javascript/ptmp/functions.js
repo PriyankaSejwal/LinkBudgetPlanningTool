@@ -105,9 +105,62 @@ function createSlavesCoordinateField() {
             // checking whether lat long are in the lat long bounds for the country
             // checkSlaveBounds(lat, long, i);
           }
+        } else {
+          if (marker[i] != undefined) {
+            marker[i].setMap(null);
+            polyLine[i].setMap(null);
+            reportmarker[i].setMap(null);
+            reportPolyline[i].setMap(null);
+          }
         }
       });
   }
+  // event listener in map to place markers
+  // in this if the marker array has nothing in it then the length of the array would be zero
+  // based on the length we decide whether we will pace Master or slaves
+  // if length=0 then we do not have Master we will place Master
+  // also if user has reoved the lat long details of the Master from the MAster field then marker array at index 0
+  // would be null, so we will place master on that click too.
+  // in the else part we place the slaves, we check if the length of the Arker array is greate than 1 whihc implies
+  // there is a Master whihc is laready placed in the Map. So we need to now place Slave with the click event,
+  // we loop through the marker length and  check if the marker array at that index is either undefined or null
+  // if undefined we need to place slave with that index.
+  map.addListener("click", function (event) {
+    // clickCount++;
+    if (marker.length == 0 || marker[0].map == null) {
+      addMarkerInPTMP(
+        clickCount,
+        "masterCo-ordinate",
+        "masterDDCoord",
+        event.latLng
+      );
+      checkMasterBounds(event.latLng.lat(), event.latLng.lng());
+    } else if (marker.length >= 1) {
+      var slaveNumber = marker.length;
+      for (let i = 1; i <= marker.length - 1; i++) {
+        if (marker[i] == undefined) {
+          slaveNumber = marker.length;
+          break;
+        } else {
+          if (marker[i].map == null) {
+            slaveNumber = i;
+            break;
+          }
+        }
+      }
+      console.log(slaveNumber);
+      if (slaveNumber <= numOfCoordFields) {
+        addMarkerInPTMP(
+          slaveNumber,
+          `slave${slaveNumber}Co-ordinate`,
+          `slave${slaveNumber}DDCoord`,
+          event.latLng
+        );
+        checkSlaveBounds(event.latLng.lat(), event.latLng.lng(), slaveNumber);
+        // }
+      }
+    }
+  });
 }
 
 // function to create slaves field

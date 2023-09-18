@@ -45,3 +45,23 @@
     bandwidth.
     6. The previously existing table for ubax and ub22 have min/max of rsl in each row. New tables that are added
     just have the minimum rsl required to lock to that mcs. Need to bring the tables in line with one another.
+
+4. SNR based MCS table reference 
+    The mcs table must be referred with the min SNR and not min RSSI(Sensitivity).
+    Make changes to the MCs table accordingly.
+    CHANGE IN FEASIBILITY CHECK:
+    Two check points are created now: 
+    1. RSL checked against the snesitivity for the MCS locked.
+    2. SNR checked against the Min SNR value for the MCS locked.
+
+5. Interference Inclusion
+    User based input for the Interference in any bandwidth.
+    That value of Interference is then used in place of the noise floor to calculate the SNR.
+
+6. PTMP MARKER ON CLICK
+    A marker gets placed on the Map when we click on the Map. First click is supposed 
+    to place a Master and second onwards would place the slaves while checking for the number of slaves to enter.
+    To do this three files were changed: functions.js added the map listener, mastermap.js added a function which will
+    add the lat long details in the respective fields and mastercoveragesector.js the polygon placing code has been given
+    an attribute "clickable:false"
+    

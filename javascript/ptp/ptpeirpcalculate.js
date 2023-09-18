@@ -25,6 +25,11 @@ function ptpeirpcalculate() {
     }
   }
   $("#ptpeirpMax").val(eirp);
-
-  calcTxPower();
+  if (matchedRow) {
+    calcTxPower();
+  } else {
+    console.log(
+      "The function calcTxPower is not called due to absence of matchedRow from the table."
+    );
+  }
 }
