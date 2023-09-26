@@ -23,7 +23,7 @@
   position: relative;
   /* display: flex; */
   /* width: 100%; */
-  /* height: 491px; */
+  height: 491px;
   /* overflow: hidden; */
   overflow-y: scroll;
   font-size: 13px;
@@ -61,10 +61,6 @@ label {
   letter-spacing: 0.05em;
   outline: none;
 }
-input[type="number"]::-webkit-inner-spin-button {
-  appearance: none;
-  -webkit-appearance: none;
-}
 input:hover {
   /* background-color: #b7aacc; */
   color: #54585a !important;
@@ -73,7 +69,11 @@ input:hover {
   background-color: #e7f2f7;
   color: #54585a;
 }
-/* the interference container to have display none */
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+}
+/* interference container */
 .interference-container {
   display: none;
 }
@@ -101,7 +101,6 @@ input:hover {
 }
 
 .disable {
-  -webkit-text-fill-color: #54585a;
   background-color: #e0e0d1;
   cursor: not-allowed;
   pointer-events: none;
@@ -129,11 +128,10 @@ input:hover {
 .top-margin {
   margin-top: 21px;
 }
-/* strong {
+strong {
   color: red;
-} */
+}
 .warningAlert {
-  color: red;
   display: none;
 }
 .metre {

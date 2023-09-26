@@ -72,7 +72,7 @@ $("#radioFamilyForNewRadio").change(function () {
 });
 
 /* when radio family name is entered by the user, check from the radio family
- name dropdown option whther the family name already exists */
+ name dropdown option whether the family name already exists */
 $("#radioFamilyName").change(function () {
   var radioFamilyName = $(this).val();
   console.log(radioFamilyClassName);
@@ -113,6 +113,8 @@ $("#closeNewRadioForm").click(function () {
   $(".emptyAlert").hide();
   $(".invalidNameAlert").hide();
   $(".invalidValueAlert").hide();
+  // empty the dropdown menu which has the list of radio families
+  $("#radioFamilyForNewRadio").html("");
 });
 
 // button in the new radio form which submits the details of the new radio and also hides the new radio form
@@ -120,7 +122,7 @@ $("#closeNewRadioForm").click(function () {
 $("#submitNewRadioDetails").click(function () {
   //values that were entered by the user
   const radioFamilyDropdown = $("#radioFamilyForNewRadio").val();
-  const radioFamilyInputField = $("#radioFamilyName").val();
+  const radioFamilyInputField = $("#radioFamilyName").val().trim();
   const radioFamilyName =
     radioFamilyInputField !== undefined
       ? radioFamilyInputField
@@ -165,7 +167,7 @@ $("#submitNewRadioDetails").click(function () {
     // select the fist option after deleting the otions from second onwards
     $("#radioFamilyForNewRadio").prop("selectedIndex", 0);
     // reset the form
-    $("#newRadioForm").trigger("reset");
+    $("#newRadioDetailForm").trigger("reset");
   } else {
     $(".emptyAlert").show();
   }
@@ -212,6 +214,7 @@ function tabletillmcs9(n) {
   var form = $("#newRadioDetailForm");
   const headerArray = [
     "Sensitivity",
+    "SNR",
     "MCS",
     "Modulation",
     "FEC",
@@ -219,6 +222,7 @@ function tabletillmcs9(n) {
     "Thoughput",
     "Tx Power",
   ];
+  var headerarrayLength = headerArray.length;
   const mcsArray = getMCSArray(n);
   console.log(mcsArray);
   const bandwidthnames = [20, 40, 80];
@@ -232,7 +236,7 @@ function tabletillmcs9(n) {
     var coldiv = $("<div>", { class: "col-12 sidebar-padding" });
     var label = $("<label>", {
       class: "label",
-      text: "Table for " + bandwidthnames[i - 1],
+      text: "Channel Width " + bandwidthnames[i - 1],
     });
     var table = $("<table>", {
       id: radioname + bandwidthnames[i - 1],
@@ -240,16 +244,20 @@ function tabletillmcs9(n) {
     });
     for (let j = 0; j <= n + 1; j++) {
       var row = $("<tr>").appendTo(table);
-      for (let k = 1; k <= 7; k++) {
+      for (let k = 1; k <= headerarrayLength; k++) {
         var cell = $("<td>");
         if (j == 0) {
           cell.text(headerArray[k - 1]);
+          if (k == 2 || k == 4 || k == 5 || k == 6) {
+            cell.hide();
+          }
         } else {
-          if (k == 1 || k == 6 || k == 7) {
+          if (k == 1 || k == 7 || k == 8) {
             const inputField = $("<input>", {
               type: "text",
               class: "input new-radio-input",
               id: bandwidthnames[i - 1] + `input${j}${k}`,
+              value: mcsArray[i - 1][j - 1][k - 1],
             });
             // event listener attached
             inputField.on("change", function (event) {
@@ -257,13 +265,13 @@ function tabletillmcs9(n) {
             });
             cell.append(inputField);
           } else if (k >= 2 && k <= 6) {
-            const dataValue = mcsArray[i - 1][j - 1][k - 2];
+            const dataValue = mcsArray[i - 1][j - 1][k - 1];
             cell.text(dataValue);
+            if (k == 2 || k == 4 || k == 5 || k == 6) {
+              cell.hide();
+            }
           }
         }
-        // if (k == 2 || k == 6) {
-        //   cell.hide();
-        // }
         row.append(cell);
       }
     }
@@ -301,11 +309,12 @@ function handleInput(event, j, k) {
 function createNewTable(radioname) {
   // container where new radio container is to be stored
   var tablecontainer = $(".table-container");
-  var radioFamilyName = $("#radioFamilyName").val();
+  var radioFamilyName = $("#radioFamilyName").val().trim();
   var bandwidthTable = ["20MHz", "40MHz", "80MHz"];
   var newtablecontainer = $("<div>", { class: radioFamilyName + `-table` });
   const headerArray = [
     "Sensitivity",
+    "SNR",
     "MCS",
     "Modulation",
     "FEC",
@@ -313,8 +322,8 @@ function createNewTable(radioname) {
     "Throughput",
     "Tx Power",
   ];
-  const firstRow = ["-150", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"];
-  const lastRow = ["0", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"];
+  const firstRow = ["-150", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"];
+  const lastRow = ["0", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"];
   var tableForLocalStorage = [];
   $(".newRadioTable").each(function (index) {
     console.log(index);
@@ -378,86 +387,86 @@ function getMCSArray(n) {
     case 9:
       mcsDataArray = [
         [
-          ["0", "BPSK", "1/2", "14.4"],
-          ["1", "QPSK", "1/2", "28.9"],
-          ["2", "QPSK", "3/4", "43.3"],
-          ["3", "16-QAM", "1/2", "57.8"],
-          ["4", "16-QAM", "3/4", "86.7"],
-          ["5", "64-QAM", "2/3", "115.6"],
-          ["6", "64-QAM", "3/4", "130"],
-          ["7", "64-QAM", "5/6", "144.4"],
-          ["8", "256-QAM", "3/4", "173.3"],
-          ["9", "256-QAM", "5/6", "192"],
+          ["-85", "2", "0", "BPSK", "1/2", "14.4", "10", "24"],
+          ["-83", "5", "1", "QPSK", "1/2", "28.9", "20", "24"],
+          ["-80", "9", "2", "QPSK", "3/4", "43.3", "30", "22"],
+          ["-79", "11", "3", "16-QAM", "1/2", "57.8", "40", "22"],
+          ["-77", "15", "4", "16-QAM", "3/4", "86.7", "60", "20"],
+          ["-75", "18", "5", "64-QAM", "2/3", "115.6", "80", "20"],
+          ["-73", "20", "6", "64-QAM", "3/4", "130", "91", "19"],
+          ["-70", "25", "7", "64-QAM", "5/6", "144.4", "101", "19"],
+          ["-68", "29", "8", "256-QAM", "3/4", "173.3", "120", "17"],
+          ["-63", "31", "9", "256-QAM", "5/6", "192", "135", "17"],
         ],
         [
-          ["0", "BPSK", "1/2", "30"],
-          ["1", "QPSK", "1/2", "60"],
-          ["2", "QPSK", "3/4", "90"],
-          ["3", "16-QAM", "1/2", "120"],
-          ["4", "16-QAM", "3/4", "180"],
-          ["5", "64-QAM", "2/3", "240"],
-          ["6", "64-QAM", "3/4", "270"],
-          ["7", "64-QAM", "5/6", "300"],
-          ["8", "256-QAM", "3/4", "360"],
-          ["9", "256-QAM", "5/6", "400"],
+          ["-84", "2", "0", "BPSK", "1/2", "30", "21", "24"],
+          ["-82", "5", "1", "QPSK", "1/2", "60", "42", "24"],
+          ["-79", "9", "2", "QPSK", "3/4", "90", "63", "22"],
+          ["-78", "11", "3", "16-QAM", "1/2", "120", "84", "22"],
+          ["-74", "15", "4", "16-QAM", "3/4", "180", "126", "20"],
+          ["-73", "18", "5", "64-QAM", "2/3", "240", "168", "20"],
+          ["-70", "20", "6", "64-QAM", "3/4", "270", "189", "19"],
+          ["-67", "25", "7", "64-QAM", "5/6", "300", "210", "19"],
+          ["-65", "29", "8", "256-QAM", "3/4", "360", "252", "17"],
+          ["-61", "31", "9", "256-QAM", "5/6", "400", "280", "17"],
         ],
         [
-          ["0", "BPSK", "1/2", "65"],
-          ["1", "QPSK", "1/2", "130"],
-          ["2", "QPSK", "3/4", "195"],
-          ["3", "16-QAM", "1/2", "260"],
-          ["4", "16-QAM", "3/4", "390"],
-          ["5", "64-QAM", "2/3", "520"],
-          ["6", "64-QAM", "3/4", "585"],
-          ["7", "64-QAM", "5/6", "650"],
-          ["8", "256-QAM", "3/4", "780"],
-          ["9", "256-QAM", "5/6", "866.7"],
+          ["-83", "2", "0", "BPSK", "1/2", "65", "45", "24"],
+          ["-80", "5", "1", "QPSK", "1/2", "130", "91", "24"],
+          ["-76", "9", "2", "QPSK", "3/4", "195", "136", "22"],
+          ["-74", "11", "3", "16-QAM", "1/2", "260", "182", "22"],
+          ["-72", "15", "4", "16-QAM", "3/4", "390", "273", "20"],
+          ["-70", "18", "5", "64-QAM", "2/3", "520", "364", "20"],
+          ["-68", "20", "6", "64-QAM", "3/4", "585", "410", "19"],
+          ["-63", "25", "7", "64-QAM", "5/6", "650", "455", "19"],
+          ["-61", "29", "8", "256-QAM", "3/4", "780", "546", "17"],
+          ["-55", "31", "9", "256-QAM", "5/6", "866.7", "610", "17"],
         ],
       ];
       break;
     case 11:
       mcsDataArray = [
         [
-          ["0", "BPSK", "1/2", "17.2"],
-          ["1", "QPSK", "1/2", "34.4"],
-          ["2", "QPSK", "3/4", "51.6"],
-          ["3", "16-QAM", "1/2", "68.8"],
-          ["4", "16-QAM", "3/4", "103.2"],
-          ["5", "64-QAM", "2/3", "137.2"],
-          ["6", "64-QAM", "3/4", "154.9"],
-          ["7", "64-QAM", "5/6", "172.1"],
-          ["8", "256-QAM", "3/4", "206.5"],
-          ["9", "256-QAM", "5/6", "229.4"],
-          ["10", "1024-QAM", "3/4", "258.1"],
-          ["11", "1024-QAM", "5/6", "286.8"],
+          ["-85", "5", "0", "BPSK", "1/2", "17.2", "12", "26"],
+          ["-83", "7.5", "1", "QPSK", "1/2", "34.4", "24", "26"],
+          ["-80", "10", "2", "QPSK", "3/4", "51.6", "36.1", "25"],
+          ["-79", "12.5", "3", "16-QAM", "1/2", "68.8", "48.2", "25"],
+          ["-77", "15", "4", "16-QAM", "3/4", "103.2", "72.2", "24"],
+          ["-75", "17.5", "5", "64-QAM", "2/3", "137.2", "96.3", "24"],
+          ["-73", "20", "6", "64-QAM", "3/4", "154.9", "108.4", "23"],
+          ["-70", "22.5", "7", "64-QAM", "5/6", "172.1", "120.5", "22"],
+          ["-68", "25", "8", "256-QAM", "3/4", "206.5", "144.5", "21"],
+          ["-63", "27.5", "9", "256-QAM", "5/6", "229.4", "160.7", "20"],
+          ["-59", "30", "10", "1024-QAM", "3/4", "258.1", "180.7", "19"],
+          ["-57", "32.5", "11", "1024-QAM", "5/6", "286.8", "200.8", "19"],
         ],
         [
-          ["0", "BPSK", "1/2", "34.4"],
-          ["1", "QPSK", "1/2", "68.8"],
-          ["2", "QPSK", "3/4", "103.2"],
-          ["3", "16-QAM", "1/2", "137.6"],
-          ["4", "16-QAM", "3/4", "206.5"],
-          ["5", "64-QAM", "2/3", "275.3"],
-          ["6", "64-QAM", "3/4", "309.7"],
-          ["7", "64-QAM", "5/6", "344.1"],
-          ["8", "256-QAM", "3/4", "412.9"],
-          ["9", "256-QAM", "5/6", "458.8"],
-          ["10", "1024-QAM", "3/4", "516.2"],
-          ["11", "1024-QAM", "5/6", "573.5"],
+          ["-84", "5", "0", "BPSK", "1/2", "34.4", "24.1", "26"],
+          ["-82", "7.5", "1", "QPSK", "1/2", "68.8", "48.2", "26"],
+          ["-79", "10", "2", "QPSK", "3/4", "103.2", "72.2", "25"],
+          ["-78", "12.5", "3", "16-QAM", "1/2", "137.6", "96.32", "25"],
+          ["-74", "15", "4", "16-QAM", "3/4", "206.5", "144.55", "24"],
+          ["-73", "17.5", "5", "64-QAM", "2/3", "275.3", "192.71", "24"],
+          ["-70", "20", "6", "64-QAM", "3/4", "309.7", "216.79", "23"],
+          ["-67", "22.5", "7", "64-QAM", "5/6", "344.1", "240.87", "22"],
+          ["-65", "25", "8", "256-QAM", "3/4", "412.9", "289.03", "21"],
+          ["-61", "27.5", "9", "256-QAM", "5/6", "458.8", "321.16", "20"],
+          ["-57", "30", "10", "1024-QAM", "3/4", "516.2", "361.34", "19"],
+          ["-55", "32.5", "11", "1024-QAM", "5/6", "573.5", "401.45", "19"],
         ],
         [
-          ["0", "BPSK", "1/2", "72.1"],
-          ["1", "QPSK", "1/2", "144.1"],
-          ["2", "QPSK", "3/4", "216.2"],
-          ["3", "16-QAM", "1/2", "288.2"],
-          ["4", "16-QAM", "3/4", "432.4"],
-          ["5", "64-QAM", "2/3", "576.5"],
-          ["6", "64-QAM", "3/4", "648.5"],
-          ["7", "64-QAM", "5/6", "720.6"],
-          ["8", "256-QAM", "3/4", "864.7"],
-          ["9", "256-QAM", "5/6", "960.8"],
-          ["10", "1024-QAM", "3/4", "1080.9"],
-          ["11", "1024-QAM", "5/6", "1201"],
+          ["-83", "5", "0", "BPSK", "1/2", "72.1", "50.47", "26"],
+          ["-80", "7.5", "1", "QPSK", "1/2", "144.1", "100.87", "26"],
+          ["-76", "10", "2", "QPSK", "3/4", "216.2", "151.4", "25"],
+          ["-74", "12.5", "3", "16-QAM", "1/2", "288.2", "201.74", "25"],
+          ["-72", "15", "4", "16-QAM", "3/4", "432.4", "302.4", "24"],
+          ["-70", "17.5", "5", "64-QAM", "2/3", "576.5", "403.5", "24"],
+          ["-68", "20", "6", "64-QAM", "3/4", "648.5", "453.95", "23"],
+          ["-63", "22.5", "7", "64-QAM", "5/6", "720.6", "504.4", "22"],
+          ["-61", "25", "8", "256-QAM", "3/4", "864.7", "605.29", "21"],
+          ["-55", "27.5", "9", "256-QAM", "5/6", "960.8", "672.56", "20"],
+          ["-51", "30", "10", "1024-QAM", "3/4", "1080.9", "756.63", "19"],
+          ["-50", "32.5", "11", "1024-QAM", "5/6", "1201", "840.7", "19"],
         ],
       ];
       break;

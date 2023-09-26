@@ -84,3 +84,51 @@ ul.dropdown-menu a:hover {
     padding-top: 85px !important;
   }
 }
+
+@media screen and (max-width: 1500px) {
+  body {
+    overflow-y: hidden;
+  }
+  #ptptmpselectionPage {
+    height: 547px;
+  }
+  /* .sidebarBody2 {
+    height: 496px;
+  } */
+}
+
+@media screen and (max-width: 1280px) {
+  body {
+    overflow-y: scroll;
+  }
+  #ptpptmpselectionPage {
+    height: 545px;
+  }
+  /* .sidebarBody2 {
+    height: 494px;
+  } */
+}
+
+@media screen and (max-width: 1280px) and (min-height: 799px) {
+  #ptpptmpselectionPage {
+    height: 690px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #ptpptmpselectionPage {
+    height: 545px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  #ptpptmpselectionPage {
+    height: 545px;
+  }
+}
+
+@media screen and (min-height: 1024px) and (max-height: 1368px) {
+  #ptpptmselectionPage {
+    height: 544px;
+  }
+}

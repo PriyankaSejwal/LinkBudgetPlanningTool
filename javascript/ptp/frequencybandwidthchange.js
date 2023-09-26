@@ -3,10 +3,12 @@
 $("#ptpchannelBandwidth").change(function () {
   checkBandwidth();
   ptpeirpcalculate();
+  mcsrefer();
 });
 
 $("#ptpchannelFrequency").change(function () {
   checkBandwidth();
   ptpeirpcalculate();
   calcFresnel();
+  mcsrefer();
 });

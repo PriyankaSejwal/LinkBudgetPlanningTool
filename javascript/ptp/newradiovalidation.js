@@ -22,7 +22,7 @@ $("#radioPower").change(function () {
 function validateMinRSL(event, j, k) {
   if (j > 1) {
     var currentrslVal = parseInt($(event.target).val());
-    if (k == 1 || k == 6) {
+    if (k == 1 || k == 7) {
       var currentcell = $(event.target).closest("td");
       var previousRow = currentcell.closest("tr").prev();
       var previousCell = previousRow.find("td").eq(currentcell.index());
@@ -37,7 +37,7 @@ function validateMinRSL(event, j, k) {
         $(event.target).css("border-color", "");
       }
     }
-    if (k == 7) {
+    if (k == 8) {
       var currentcell = $(event.target).closest("td");
       var previousRow = currentcell.closest("tr").prev();
       var previousCell = previousRow.find("td").eq(currentcell.index());

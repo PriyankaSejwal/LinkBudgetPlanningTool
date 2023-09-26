@@ -128,12 +128,7 @@ function createSlavesCoordinateField() {
   map.addListener("click", function (event) {
     // clickCount++;
     if (marker.length == 0 || marker[0].map == null) {
-      addMarkerInPTMP(
-        clickCount,
-        "masterCo-ordinate",
-        "masterDDCoord",
-        event.latLng
-      );
+      addMarkerInPTMP(0, "masterCo-ordinate", "masterDDCoord", event.latLng);
       checkMasterBounds(event.latLng.lat(), event.latLng.lng());
     } else if (marker.length >= 1) {
       var slaveNumber = marker.length;

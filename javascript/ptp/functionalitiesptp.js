@@ -403,17 +403,24 @@ function deviceinfo() {
       );
       if (rsl >= sensitivity) {
         console.log(
-          `In loop ${i} Rsl caluclated is ${rsl} and sensitivity is ${sensitivity}`
+          `In loop ${i} Rsl calculated is ${rsl} and sensitivity is ${sensitivity}`
         );
         rslMatched = true;
+      } else {
+        rslMatched = false;
       }
       if (snrcalculated >= minSNR) {
         console.log(
           `In loop ${i} SNR calculated is ${snrcalculated} and min snr is ${minSNR}`
         );
         snrMatched = true;
+      } else {
+        snrMatched = false;
       }
     }
+
+    console.log("Both rsl snr match/no match", rslMatched, snrMatched);
+
     if (rslMatched) {
       console.log(
         `RSL value matched for Site${i} with calculated rsl and sensitivity as:`,
@@ -449,8 +456,10 @@ function deviceinfo() {
       } else {
         //when calculated snr is not smaller than minSNR, snr is not matched with the criteria
         var tablelength = refertable.rows.length;
+        var snrcalculated = $(`#snr1`).html();
         for (let t = 1; t < tablelength; t++) {
           var minSNR = parseInt(refertable.rows[t].cells.item(1).innerHTML);
+
           if (minSNR > snrcalculated) {
             console.log(
               "Minimum snr as per mcs is:",
@@ -458,15 +467,15 @@ function deviceinfo() {
               "& the calculated snr is: ",
               snrcalculated
             );
-            var throughput = refertable.rows[t].cells.item(6).innerHTML;
+            var throughput = refertable.rows[t - 1].cells.item(6).innerHTML;
             window.alert(
-              `At row number ${i}, With ${snrcalculated}dB SNR, we can achieve maximum ${throughput}Mbps.`
+              ` With given user inputs (SNR ${snrcalculated}dB), we can achieve maximum throughput of ${throughput}Mbps.`
             );
             // removing the calculations from the link summary table
-            // empty = document.querySelectorAll(".empty");
-            // for (let j = 0; j < empty.length; j++) {
-            //   empty[j].innerHTML = "";
-            // }
+            empty = document.querySelectorAll(".empty");
+            for (let j = 0; j < empty.length; j++) {
+              empty[j].innerHTML = "";
+            }
             break;
           }
         }
@@ -474,18 +483,19 @@ function deviceinfo() {
     } else {
       // when calculated rsl is not smaller than sensitivity, rsl is not matched with the min snr criteria
       var tablelength = refertable.rows.length;
-      for (let t = 1; t < tablecontainer.length; t++) {
+      var rsl = $("#rsl1").html();
+      for (let t = 1; t < tablelength; t++) {
         var sensitivity = parseInt(refertable.rows[t].cells.item(0).innerHTML);
         if (sensitivity > rsl) {
-          console.log("Sensitivity:", sensitivty, "& RSL", rsl);
-          var throughput = refertable.rows[t].cells.item(6).innerHTML;
+          console.log("Sensitivity:", sensitivity, "& RSL", rsl);
+          var throughput = refertable.rows[t - 1].cells.item(6).innerHTML;
           window.alert(
-            `At row number ${i}, With ${rsl}dBm RSL, we can achieve maximum ${throughput}Mbps.`
+            `Based on the given inputs (RSL ${rsl}dBm), we can achieve maximum throughput of ${throughput}Mbps.`
           );
           // empty = document.querySelectorAll(".empty");
-          // for(let j=0; j<empty.length; j++){
-          //   empty[j].innerHTML = "";
-          // }
+          for (let j = 0; j < empty.length; j++) {
+            empty[j].innerHTML = "";
+          }
           break;
         }
       }
@@ -495,51 +505,56 @@ function deviceinfo() {
 
 // Function to calculate LINK AVAILABILITY
 function availability() {
-  var anthta = parseFloat(document.getElementById("aheight1").value);
-  var anthtb = parseFloat(document.getElementById("aheight2").value);
-  var min_antht = Math.min(anthta, anthtb);
-  var linkdist = parseFloat(document.getElementById("linkDistance").innerHTML);
-  var path_inclination = Math.abs((anthta - anthtb) / linkdist);
-  var f = document.getElementById("ptpchannelFrequency");
-  var freq = parseFloat(f.options[f.selectedIndex].innerHTML);
-  var flat_fade_margin1 = parseFloat(
-    document.getElementById("fadeMargin1").innerHTML
-  );
-  var flat_fade_margin2 = parseFloat(
-    document.getElementById("fadeMargin2").innerHTML
-  );
-  var flat_fade_margin = Math.min(flat_fade_margin1, flat_fade_margin2);
-  // Availability as per Sir's Tool
-  // var geoclimatic_factor = 0.00003647539;
-  // var fading_occurance_factor =
-  //   (geoclimatic_factor *
-  //     linkdist ** 3.1 *
-  //     (1 + path_inclination) ** -1.29 *
-  //     (freq / 1000) ** 0.8 *
-  //     10 ** (-0.00089 * min_antht - flat_fade_margin / 10)) /
-  //   100;
-  // var fade_depth = 25 + 1.2 * Math.log10(fading_occurance_factor);
-  // var flat_fade_exceeded_in_WM = 1 - (1 - 2 * fading_occurance_factor);
-  // var link_availability_due_to_multipath = (1 - flat_fade_exceeded_in_WM) * 100;
+  var snr1 = $("#snr1").html();
+  if (snr1 != "" || snr1 != "N/A") {
+    var anthta = parseFloat(document.getElementById("aheight1").value);
+    var anthtb = parseFloat(document.getElementById("aheight2").value);
+    var min_antht = Math.min(anthta, anthtb);
+    var linkdist = parseFloat(
+      document.getElementById("linkDistance").innerHTML
+    );
+    var path_inclination = Math.abs((anthta - anthtb) / linkdist);
+    var f = document.getElementById("ptpchannelFrequency");
+    var freq = parseFloat(f.options[f.selectedIndex].innerHTML);
+    var flat_fade_margin1 = parseFloat(
+      document.getElementById("fadeMargin1").innerHTML
+    );
+    var flat_fade_margin2 = parseFloat(
+      document.getElementById("fadeMargin2").innerHTML
+    );
+    var flat_fade_margin = Math.min(flat_fade_margin1, flat_fade_margin2);
+    // Availability as per Sir's Tool
+    // var geoclimatic_factor = 0.00003647539;
+    // var fading_occurance_factor =
+    //   (geoclimatic_factor *
+    //     linkdist ** 3.1 *
+    //     (1 + path_inclination) ** -1.29 *
+    //     (freq / 1000) ** 0.8 *
+    //     10 ** (-0.00089 * min_antht - flat_fade_margin / 10)) /
+    //   100;
+    // var fade_depth = 25 + 1.2 * Math.log10(fading_occurance_factor);
+    // var flat_fade_exceeded_in_WM = 1 - (1 - 2 * fading_occurance_factor);
+    // var link_availability_due_to_multipath = (1 - flat_fade_exceeded_in_WM) * 100;
 
-  // Availability as per ITU R P 530
-  var terrain_fac = 4;
-  var climate_fac = 0.5;
-  var outageDueToFading =
-    terrain_fac *
-    climate_fac *
-    6 *
-    Math.pow(10, -7) *
-    (freq / 1000) *
-    Math.pow(linkdist, 3) *
-    Math.pow(10, -(flat_fade_margin / 10));
+    // Availability as per ITU R P 530
+    var terrain_fac = 4;
+    var climate_fac = 0.5;
+    var outageDueToFading =
+      terrain_fac *
+      climate_fac *
+      6 *
+      Math.pow(10, -7) *
+      (freq / 1000) *
+      Math.pow(linkdist, 3) *
+      Math.pow(10, -(flat_fade_margin / 10));
 
-  var linkAvailability = 100 * (1 - 2 * outageDueToFading);
-  console.log("fading occurance factor", linkAvailability);
+    var linkAvailability = 100 * (1 - 2 * outageDueToFading);
+    console.log("fading occurance factor", linkAvailability);
 
-  //  populating the link availability column with the value calculated
-  document.getElementById("reportlinkAvailability").innerHTML =
-    linkAvailability.toFixed(4) + " ";
-  document.getElementById("linkAvailability").innerHTML =
-    linkAvailability.toFixed(4);
+    //  populating the link availability column with the value calculated
+    document.getElementById("reportlinkAvailability").innerHTML =
+      linkAvailability.toFixed(4) + " ";
+    document.getElementById("linkAvailability").innerHTML =
+      linkAvailability.toFixed(4);
+  }
 }

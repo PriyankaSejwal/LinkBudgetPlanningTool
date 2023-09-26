@@ -16,7 +16,12 @@
 }
 @media screen and (max-width: 1500px) {
   .container-fluid {
-    padding-top: 110px;
+    padding-top: 110px !important;
+  }
+}
+@media screen and (max-width: 992px) {
+  .container-fluid {
+    padding-top: 110px !important;
   }
 }
 @media screen and (max-width: 550px) {
@@ -24,16 +29,9 @@
     padding-top: 90px !important;
   }
 }
-
-@media screen and (max-width: 300px) {
+@media screen and (max-width: 420px) {
   .container-fluid {
     padding-top: 80px !important;
-  }
-}
-
-@media screen and (min-width: 550px) and (max-width: 749px) {
-  .bottom-head {
-    margin-top: 15px;
   }
 }
 
@@ -48,11 +46,11 @@
 }
 
 @media screen and (max-width: 992px) and (min-width: 750px) {
-  #ptpPage .btn,
-  #PTPPage .btn a {
+  #importPTPPage .btn,
+  #importPTPPage .btn a {
     font-size: 25px;
   }
-  #ptpPage #ptpctryCode {
+  #importPTPPage #importptpctryCode {
     font-size: 25px;
     height: 49px;
   }
@@ -63,16 +61,16 @@
     height: 547px;
   }
   .sidebarBody2 {
-    height: 496px;
+    height: 496px !important;
   }
 }
 
 @media screen and (max-width: 1280px) {
   .overlay-section {
-    height: 545px;
+    height: 532px;
   }
   .sidebarBody2 {
-    height: 494px;
+    height: 494px !important;
   }
 }
 
@@ -81,7 +79,7 @@
     height: 690px;
   }
   .sidebarBody2 {
-    height: 639px;
+    height: 639px !important;
   }
 }
 
@@ -90,22 +88,7 @@
     height: 545px;
   }
   .sidebarBody2 {
-    height: 493px;
-  }
-  .obstructionPopUp {
-    left: 0%;
-    top: 160px;
-    height: 40%;
-    width: 100%;
-  }
-}
-
-@media screen and (max-width: 750px) {
-  .overlay-section {
-    height: 545px;
-  }
-  .sidebarBody2 {
-    height: 494px;
+    height: 493px !important;
   }
 }
 
@@ -114,6 +97,18 @@
     height: 544px;
   }
   .sidebarBody2 {
-    height: 491px;
+    height: 491px !important;
+  }
+}
+
+.sidebar-padding {
+  padding: 3px;
+}
+@media screen and (max-width: 750px) {
+  .overlay-section {
+    height: 545px;
+  }
+  .sidebarBody2 {
+    height: 494px !important;
   }
 }

@@ -1,10 +1,15 @@
 var matchedRow;
 $("#subscribedBandwidth").on("change", function () {
   $(".emptySubscriberBwAlert").fadeOut();
-  var subscriberBw = parseInt($(this).val());
+
   // check whether site 1 , site 2 details are available along with the subsribed bandwidth.
   // buttonActive();
   // call device info for tx power, throughput data and sensitivity data from the table
+  mcsrefer();
+});
+
+function mcsrefer() {
+  var subscriberBw = parseInt($("#subscribedBandwidth").val());
   var refertable = referencetable1;
   matchedRow = null;
   var tablelength = refertable.rows.length;
@@ -19,7 +24,7 @@ $("#subscribedBandwidth").on("change", function () {
   //  all the link summary table data would be empty
 
   if (matchedRow) {
-    $(".subscribedBandwidthAlert").hide();
+    $(".subscribedBandwidthAlert").fadeOut();
     var latLngA = $("#searchtower1").val();
     var latLngB = $("#searchtower2").val();
     var distance = $("#linkDistance").html();
@@ -44,7 +49,7 @@ $("#subscribedBandwidth").on("change", function () {
       empty[j].innerHTML = "";
     }
   }
-});
+}
 
 // function which refers the table row based on the subscriber set bandwidth
 

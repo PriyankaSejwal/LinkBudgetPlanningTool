@@ -2,14 +2,14 @@
 /* NavBar Styling */
 /* NavBar Styling */
 body {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   font-size: 16px;
   box-sizing: border-box;
   background: transparent;
   color: #545454;
   font-family: "Poppins", sans-serif;
-  max-width: 1500px;
+  max-width: 1400px;
 }
 
 /* Loader CSS */
@@ -36,14 +36,14 @@ body {
 }
 .header {
   top: 0;
-  left: 0;
+  /* left: 0; */
   position: fixed;
   z-index: 9;
   width: 100%;
   padding: 0px;
   height: 110px;
-  /* box-shadow: rgb(0 0 0 /20%) 0 2px 4px; */
-  max-width: 1500px;
+  margin: 0 auto;
+  max-width: 1400px;
 }
 .top-head {
   width: 100%;
@@ -235,9 +235,9 @@ button {
 
 /* Responsive navbar */
 
-@media screen and (max-width: 1500px) {
+@media screen and (min-width: 1200px) {
   .container {
-    width: 1300px;
+    width: 1250px;
   }
 }
 
@@ -246,10 +246,9 @@ button {
     max-width: 1270px;
   }
 }
-
-@media screen and (max-width: 1280px) {
+@media screen and (min-width: 1500px) {
   .container {
-    width: 1170px;
+    width: 1300px;
   }
 }
 @media screen and (max-width: 1024px) {
@@ -349,7 +348,7 @@ button {
 
 /* @media screen and (max-width: 1024px) {
   .logo {
-    width: 50%;
+    width: 30%;
   }
 } */
 
@@ -381,7 +380,7 @@ button {
 } */
 @media screen and (max-width: 300px) {
   .logo a img {
-    width: 100%;
+    width: 90%;
     transform: none;
     margin: 5px 0;
   }
@@ -592,4 +591,13 @@ button {
   .show {
     left: 0;
   }
+}
+
+@media screen and (max-width: 1280px) and (min-height: 799px) {
+  #ptpptmpselectionPage {
+    height: 690px;
+  }
+  /* .sidebarBody2 {
+    height: 639px;
+  } */
 }

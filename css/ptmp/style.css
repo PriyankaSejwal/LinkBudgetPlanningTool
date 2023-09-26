@@ -1,11 +1,12 @@
 body {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
+  font-size: 100%;
   font-family: "Poppins", sans-serif;
   color: #350964;
   height: 100%;
-  max-width: 1500px;
+  max-width: 1400px;
   /* overflow: hidden; */
 }
 .container-fluid {
@@ -32,7 +33,7 @@ body {
   position: relative;
   /* display: flex; */
   /* width: 100%; */
-  /* height: 496px; */
+  height: 520px;
   /* overflow: hidden; */
   overflow-y: scroll;
   font-size: 13px;
@@ -235,12 +236,6 @@ input {
 }
 
 /* Slave Section */
-#slavesInput {
-  /* height: 248px; */
-  /* overflow-y: scroll; */
-  /* border-bottom: 1px solid #d6d6d6; */
-  /* box-shadow: rgb(0 0 0 /20%) 0 -2px 4px; */
-}
 #slavesInput .inputSection {
   display: flex;
   flex-wrap: wrap;
@@ -264,6 +259,7 @@ input {
 .units {
   color: #54585a;
   font-size: 10px; /* padding-left: 45px; */
+  /* opacity: 0.4; */
 }
 .masterTableDiv {
   width: 95%;
