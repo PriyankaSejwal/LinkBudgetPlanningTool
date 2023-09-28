@@ -176,8 +176,8 @@ strong {
 }
 .ptp-link-summary tr {
   border-bottom: 1px solid #b7aacc;
-  line-height: 30px !important;
-  display: table-row;
+  line-height: 30px;
+  /* display: table-row; */
 }
 .ptp-link-summary th {
   /* padding-left: 10px; */
@@ -201,6 +201,12 @@ strong {
   /* color: rgb(131, 184, 185); */
   color: #625094;
   text-align: center;
+}
+
+/* cinr rows to hide */
+.cinr-hidden {
+  display: none;
+  /* opacity: 0; */
 }
 
 /* Link Report Button */

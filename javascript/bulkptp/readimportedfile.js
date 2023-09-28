@@ -123,7 +123,7 @@ function displayData(data) {
     var radioB = rowData[8];
     if (!checkRadio(radioA, radioB, i)) {
       match = false;
-      $("#forcoordcheck").html(``);
+      $("#allokmessage").html(``);
       break;
     }
 
@@ -132,7 +132,7 @@ function displayData(data) {
     var antgainB = rowData[10];
     if (!checkantgainvalue(antgainA, antgainB, i)) {
       match = false;
-      $("#forcoordcheck").html(``);
+      $("#allokmessage").html(``);
       // $(`#forradiocheck`).html(`Radios belong to different families at row ${i}`)
       break;
     }
@@ -140,15 +140,14 @@ function displayData(data) {
     // function to check the coordinate format
     if (!checkCoordinateFormat(latlongArray, rowData, row, i)) {
       match = false;
-      $("#forcoordcheck").html(``);
+      $("#allokmessage").html(``);
       break;
     }
 
     if (match) {
-      $("#forcoordcheck").html(
+      $("#allokmessage").html(
         "The coordinates are in proper format, radios are also from same families and antenna gains are non-zero positive values."
       );
-      $(".import-message-section").show();
       $(`#importptpreportbtn`).prop("disabled", false);
     }
 
@@ -355,7 +354,7 @@ function calculateSNR(bandwidth, row) {
     console.log(snr);
     // adding the calculated data to the table
     var cell1 = row.insertCell(-1);
-    cell1.innerHTML = snr + " db";
+    cell1.innerHTML = snr + " dB";
   }
 }
 
@@ -445,7 +444,7 @@ function calculateFadeMargin(row) {
 
     // adding the calculated fade margin into the table
     var cell1 = row.insertCell(-1);
-    cell1.innerHTML = fademargin + " db";
+    cell1.innerHTML = fademargin + " dB";
 
     var rowlength = refertable.rows.length;
     for (let t = 1; t < rowlength; t++) {

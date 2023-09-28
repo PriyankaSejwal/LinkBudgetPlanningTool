@@ -333,9 +333,6 @@ function deviceinfo() {
     var tx2 = parseInt($("#transmitPower2").val());
     // the interference if added by the user then noise floor becomes equal to the interference
     var interference = $("#interference-val").val();
-    if (interference) {
-      noisefloor = interference;
-    }
     var snrMatched;
     var rslMatched;
 
@@ -376,6 +373,16 @@ function deviceinfo() {
 
       // SNR
       var snrcalculated = (parseFloat(rsl) + parseFloat(noisefloor)).toFixed(2);
+      // CINR if interferecne is given
+      if (interference) {
+        $(".cinr-hidden").css("display", "table-row");
+        var cinrcalculated = (
+          parseFloat(rsl) + parseFloat(interference)
+        ).toFixed(2);
+        $(`#cinr${i}`).html(cinrcalculated);
+      } else {
+        $(".cinr-hidden").css("display", "none");
+      }
       // Fade Margin
       var fademargin = (parseFloat(rsl) - parseFloat(sensitivity)).toFixed(2);
       var radioName = $(`#radio${i} option:selected`).html();

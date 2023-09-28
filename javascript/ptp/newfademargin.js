@@ -62,6 +62,21 @@ $("#add-interference").click(function () {
 
 // interference value is added
 $("#interference-val").change(function () {
-  console.log("interference value is:", $(this).val());
-  deviceinfo();
+  var interference = $(this).val();
+  if (interference) {
+    var rsl1 = $("#rsl1").html();
+    var rsl2 = $("#rsl2").html();
+    if (rsl1 != "" && rsl2 != "") {
+      console.log("rsl1 and rsl2 are already present");
+      $(".cinr-hidden").css("display", "table-row");
+      var cinr1 = (parseFloat(rsl1) + parseFloat(interference)).toFixed(2);
+      var cinr2 = (parseFloat(rsl2) + parseFloat(interference)).toFixed(2);
+      $(`#cinr1`).html(cinr1);
+      $(`#cinr2`).html(cinr2);
+    } else {
+      console.log("rsl1 and rsl2 are not present.");
+    }
+  } else {
+    $(".cinr-hidden").css("display", "none");
+  }
 });

@@ -126,11 +126,19 @@ input::file-selector-button {
 /* span which contains the message after excel file reading */
 #messageafterfileread {
   list-style: none;
-  height: 60px;
+  height: auto;
   width: 100%;
   background: #fff;
   padding: 6px 0px;
   margin: 0;
+}
+
+/* the list items which carry the message of errors in the input or no errors to have green or red color for text */
+#allokmessage {
+  color: green;
+}
+.errormessage {
+  color: red;
 }
 
 /* span in addCoordData */

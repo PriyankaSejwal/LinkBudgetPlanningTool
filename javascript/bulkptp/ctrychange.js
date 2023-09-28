@@ -101,6 +101,7 @@ $("#importptpresetLink").click(function () {
   $("#forcoordcheck").html("");
   $("#forradiocheck").html("");
   $("#forgaincheck").html("");
+  $("#allokmessage").html("");
   // remove markers and polylines
   var markerarraylength = markerarray.length;
   for (let i = 0; i < markerarraylength; i++) {
