@@ -39,9 +39,9 @@
   z-index: 9;
   width: 100%;
   padding: 0px;
-  height: 110px;
+  height: 81px;
   /* box-shadow: rgb(0 0 0 /20%) 0 2px 4px; */
-  max-width: 1400px;
+  max-width: 100%;
   margin: 0 auto;
 }
 .top-head {
@@ -77,9 +77,9 @@ button {
   font-size: 14px;
   font-weight: 400;
   padding: 7.5px 0px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   display: block;
-  color: #808285;
+  color: #140f15;
 }
 .topheadflex a:active,
 .topheadflex a:hover {
@@ -108,7 +108,7 @@ button {
 .search-bar form .form-control {
   font-size: 15px;
   box-shadow: none;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   color: #555;
   border: 1px solid #ccc;
   /* border-bottom-left-radius: 6px;
@@ -173,7 +173,7 @@ button {
 }
 .mainmenu .menuoutbox ul li span {
   line-height: 30px;
-  color: #808285;
+  color: #140f15;
   display: block;
   position: relative;
   font-size: 16px;
@@ -208,7 +208,7 @@ button {
   color: #fff;
   padding: 5px;
   line-height: 20px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   display: block;
   font-size: 14px;
   font-weight: 400;

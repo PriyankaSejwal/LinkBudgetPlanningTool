@@ -7,9 +7,9 @@ body {
   font-size: 16px;
   box-sizing: border-box;
   background: transparent;
-  color: #545454;
-  font-family: "Poppins", sans-serif;
-  max-width: 1400px;
+  color: #140f15;
+  font-family: "Roboto", sans-serif;
+  max-width: 100%;
 }
 
 /* Loader CSS */
@@ -41,9 +41,9 @@ body {
   z-index: 9;
   width: 100%;
   padding: 0px;
-  height: 110px;
+  height: 81px;
   margin: 0 auto;
-  max-width: 1400px;
+  max-width: 100%;
 }
 .top-head {
   width: 100%;
@@ -78,7 +78,7 @@ button {
   font-size: 14px;
   font-weight: 400;
   padding: 7.5px 0px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   display: block;
   color: #808285;
 }
@@ -174,7 +174,7 @@ button {
 }
 .mainmenu .menuoutbox ul li span {
   line-height: 30px;
-  color: #808285;
+  color: #140f15;
   display: block;
   position: relative;
   font-size: 16px;
@@ -209,7 +209,7 @@ button {
   color: #fff;
   padding: 5px;
   line-height: 20px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   display: block;
   font-size: 14px;
   font-weight: 400;
@@ -477,7 +477,7 @@ button {
 @media screen and (max-width: 920px) {
   .mainmenu .menuoutbox ul li span {
     line-height: 30px;
-    color: #808285;
+    color: #140f15;
     display: block;
     position: relative;
     font-size: 25px;
@@ -491,7 +491,7 @@ button {
 @media screen and (max-width: 1300px) {
   .mainmenu .menuoutbox ul li span {
     line-height: 30px;
-    color: #808285;
+    color: #140f15;
     display: block;
     position: relative;
     font-size: 25px;

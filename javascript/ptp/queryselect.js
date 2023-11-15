@@ -88,4 +88,5 @@ document.getElementById("ptpresetLink").addEventListener("click", function () {
     $(`#antgain${i}`).removeClass("extAnt");
     $(`#cableLoss${i}`).removeClass("extAnt");
   }
+  $(".warningAlert").hide();
 });

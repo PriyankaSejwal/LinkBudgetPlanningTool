@@ -40,8 +40,8 @@ function exportToExcel() {
   }
   for (var i = 1; i < elt2.rows.length; i++) {
     column1 = elt2.rows[i].cells[0].innerText;
-    column2 = String(elt2.rows[i].cells[1].innerText);
-    column3 = String(elt2.rows[i].cells[2].innerText);
+    column2 = String(elt2.rows[i].cells[1].innerText).trim();
+    column3 = String(elt2.rows[i].cells[2].innerText).trim();
     if (column3 == "") {
       rows[0].push(column1);
       rows[1].push(column2);

@@ -4,8 +4,11 @@ function checkSlaveFormat(lat, long, i) {
   // const dmsPattern = /^\s?-?\d{1,3}[°]\d{1,2}[']\d{1,2}(\.\d+)?["][NSWE]\s?$/i;
 
   // dms pattern which assumes that there can or cannot be one or many space after the dms symbols \s*?
+  // const dmsPattern =
+  //   /^\s?-?\d{1,3}[°]\s*?\d{1,2}[']\s*?\d{1,2}(\.\d+)?["]\s*?[NSWE]\s?$/i;
+
   const dmsPattern =
-    /^\s?-?\d{1,3}[°]\s*?\d{1,2}[']\s*?\d{1,2}(\.\d+)?["]\s*?[NSWE]\s?$/i;
+    /^\s?-?\d{1,3}[°]\s*?|\s*\d{1,2}[']\s*?|\s*?\d{1,2}(\.\d+)?["]|['']|\s*?[NSWE]\s?$/i;
 
   // Regular expression to match DD format (e.g. 40.446195, -79.948862)
   const ddPattern = /^\s?-?\d+(\.\d+)?°?\s?$/;

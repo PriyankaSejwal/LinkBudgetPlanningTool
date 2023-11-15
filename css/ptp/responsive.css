@@ -15,19 +15,19 @@
   }
 }
 @media screen and (max-width: 1500px) {
-  .container-fluid {
-    padding-top: 110px;
+  .padding-top {
+    padding-top: 81px;
   }
 }
 @media screen and (max-width: 550px) {
-  .container-fluid {
-    padding-top: 90px !important;
+  .padding-top {
+    padding-top: 54px;
   }
 }
 
 @media screen and (max-width: 300px) {
-  .container-fluid {
-    padding-top: 80px !important;
+  .padding-top {
+    padding-top: 51px;
   }
 }
 
@@ -60,10 +60,10 @@
 
 @media screen and (max-width: 1500px) {
   .overlay-section {
-    height: 547px;
+    height: calc(100vh - 81px);
   }
   .sidebarBody2 {
-    height: 496px;
+    height: calc(100vh - 127px);
   }
 }
 

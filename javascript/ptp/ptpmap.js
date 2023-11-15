@@ -165,8 +165,6 @@ function inputMarker() {
   latlongarr = [];
   var site1 = document.getElementById("decimal1").value;
   var siteb = document.getElementById("decimal2").value;
-  console.log("value of coord 1: ", site1);
-  console.log("value of coord 2: ", siteb);
   if (site1 != "" && siteb != "") {
     var arr = document.getElementsByClassName("towerinput");
     if (arr.length == 2) {

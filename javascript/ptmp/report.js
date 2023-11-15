@@ -6,7 +6,9 @@ $("#reportButton").click(function () {
   // Populating the Summary for Master and each Slave
   var numSlaves = $("#numberOfSlaves").val();
   $("#reportMasterRadio").html($("#masterRadio option:selected").html());
-  $("#reportMasterCo-ord").html($("#masterCoord").val().replace(",", "  "));
+  $("#reportMasterCo-ord").html(
+    $("#masterCo-ordinate").val().replace(",", "  ")
+  );
   $("#reportMasterBeam").html($("#masterRadio").val().split(",")[1]);
   $("#reportNumOfSlaves").html(numSlaves);
   $("#reportMaxRange").html("5 Km");

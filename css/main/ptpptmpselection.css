@@ -1,17 +1,16 @@
 /* This is the styling of the container which allows us to select ptp ptmp */
 
 #ptpptmpselectionPage {
-  height: 547px;
+  height: calc(100vh - 81px);
 }
-
 .sidebar-body {
   height: 489px;
 }
 .sidebar-section {
   border-bottom: 1px solid #fff;
 }
-.container-fluid {
-  padding-top: 110px;
+.padding-top {
+  padding-top: 80px;
 }
 .sidebar-section-body {
   padding: 9px 8px;
@@ -69,19 +68,19 @@ ul.dropdown-menu a:hover {
 }
 
 @media screen and (max-width: 1500px) {
-  .container-fluid {
-    padding-top: 110px;
+  .padding-top {
+    padding-top: 81px;
   }
 }
 @media screen and (max-width: 550px) {
-  .container-fluid {
-    padding-top: 90px !important;
+  .padding-top {
+    padding-top: 54px !important;
   }
 }
 
 @media screen and (max-width: 300px) {
-  .container-fluid {
-    padding-top: 85px !important;
+  .padding-top {
+    padding-top: 51px !important;
   }
 }
 
@@ -90,7 +89,7 @@ ul.dropdown-menu a:hover {
     overflow-y: hidden;
   }
   #ptptmpselectionPage {
-    height: 547px;
+    height: calc(100vh - 81px);
   }
   /* .sidebarBody2 {
     height: 496px;

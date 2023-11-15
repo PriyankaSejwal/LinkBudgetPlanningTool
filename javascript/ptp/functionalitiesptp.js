@@ -21,6 +21,17 @@ for (let i = 1; i <= 2; i++) {
     var r = parseInt($(`#radio${i}`).val().split(",")[0]);
     // populating the va;ue of the antenna gain in the gain field
     $(`#antgain${i}`).val(r);
+    var gain = $(`#antgain${i}`);
+    var cableloss = $(`#cableLoss${i}`);
+    var optionGroup = $(`#radio${i} option:selected`).parent().prop("label");
+    var gainalert = $(`.gain${i}Alert`);
+    var empty = document.querySelectorAll(`.empty`);
+    if (optionGroup == "External Antenna") {
+      extRadio(gain, cableloss, gainalert, empty);
+    } else {
+      otherRadio(gain, cableloss, gainalert);
+      calcTxPower();
+    }
     if (r < eirp) {
       $(`.gainEirpAlert${i}`).fadeOut();
       // extracting the name/type and family of the radio
@@ -30,20 +41,8 @@ for (let i = 1; i <= 2; i++) {
       if (radioType1 == radioType2) {
         // function called to refer the mcs table
         checkRadios();
+        // alert about same family
         $(`.radioAlert`).hide();
-        var gain = $(`#antgain${i}`);
-        var cableloss = $(`#cableLoss${i}`);
-        var optionGroup = $(`#radio${i} option:selected`)
-          .parent()
-          .prop("label");
-        var gainalert = $(`.gain${i}Alert`);
-        var empty = document.querySelectorAll(`.empty`);
-        if (optionGroup == "External Antenna") {
-          extRadio(gain, cableloss, gainalert, empty);
-        } else {
-          otherRadio(gain, cableloss, gainalert);
-          calcTxPower();
-        }
       } else {
         $(`.radioAlert`).show();
       }
@@ -144,7 +143,7 @@ function hopazimuth() {
 
 // function whihc will check the bandwidth and will give value of noise floor and table for UBAX and normal table
 // referencetable1 for the radio at site A and reference table 2 is for the radio at site B
-var referencetable1, referencetable2;
+var referencetable1, referencetable2, bandwidthLoss;
 function checkBandwidth() {
   // check radios function would check the radio and then will give the table container name.
   // checkRadios();
@@ -162,6 +161,7 @@ function checkBandwidth() {
     case 20:
       noisefloor = 89;
       referencetable1 = document.querySelector("#" + tablecontainer + "-20MHz");
+      bandwidthLoss = 0;
       // referencetable2 = document.querySelector(
       //   "#" + tablecontainerArray[1] + "-20MHz"
       // );
@@ -169,6 +169,7 @@ function checkBandwidth() {
     case 40:
       noisefloor = 86;
       referencetable1 = document.querySelector("#" + tablecontainer + "-40MHz");
+      bandwidthLoss = 3;
       // referencetable2 = document.querySelector(
       //   "#" + tablecontainerArray[1] + "-40MHz"
       // );
@@ -176,6 +177,8 @@ function checkBandwidth() {
     case 80:
       noisefloor = 83;
       referencetable1 = document.querySelector("#" + tablecontainer + "-80MHz");
+      bandwidthLoss = 6;
+      break;
     // referencetable2 = document.querySelector(
     //   "#" + tablecontainerArray[1] + "-80MHz"
     // );
@@ -362,8 +365,8 @@ function deviceinfo() {
     );
 
     var eirpval = [
-      gain1 + gain2 + tx2 - loss1 - loss2,
-      gain1 + gain2 + tx1 - loss1 - loss2,
+      gain1 + gain2 + tx2 - loss1 - loss2 - bandwidthLoss,
+      gain1 + gain2 + tx1 - loss1 - loss2 - bandwidthLoss,
     ];
     for (let i = 1; i <= 2; i++) {
       var rsl = (
@@ -380,8 +383,11 @@ function deviceinfo() {
           parseFloat(rsl) + parseFloat(interference)
         ).toFixed(2);
         $(`#cinr${i}`).html(cinrcalculated);
+        $(`#reportcinr${i}`).html(cinrcalculated);
       } else {
         $(".cinr-hidden").css("display", "none");
+        $(`#cinr${i}`).html("");
+        $(`#reportcinr${i}`).html("");
       }
       // Fade Margin
       var fademargin = (parseFloat(rsl) - parseFloat(sensitivity)).toFixed(2);
@@ -459,6 +465,8 @@ function deviceinfo() {
             //   }
           }
         }
+        // function which will tell the max MCS achievable
+        maximumAchievableThroughput();
         availability();
       } else {
         //when calculated snr is not smaller than minSNR, snr is not matched with the criteria
@@ -483,6 +491,7 @@ function deviceinfo() {
             for (let j = 0; j < empty.length; j++) {
               empty[j].innerHTML = "";
             }
+            $("#maxThroughputMcs").html("");
             break;
           }
         }
@@ -503,10 +512,75 @@ function deviceinfo() {
           for (let j = 0; j < empty.length; j++) {
             empty[j].innerHTML = "";
           }
+          $("#maxThroughputMcs").html("");
           break;
         }
       }
     }
+  }
+}
+
+function maximumAchievableThroughput() {
+  var mcs,
+    throughput,
+    txpower,
+    newrsl1,
+    newsnr1,
+    differenceTx,
+    rslMatched,
+    rslIndex,
+    snrMatched,
+    snrIndex,
+    mainIndex;
+  var refertable = referencetable1;
+  var txpower1 = parseInt($(`#transmitPower1`).val());
+  var txpower2 = parseInt($(`#transmitPower2`).val());
+  var rsl1 = parseFloat($(`#rsl1`).html());
+  var rsl2 = parseFloat($(`#rsl2`).html());
+  var mcs1 = parseInt($(`#mcs1`).html());
+  var mcs2 = parseInt($(`#mcs2`).html());
+  var minRsl = Math.min(rsl1, rsl2);
+  var maxMcs = Math.max(mcs1, mcs2);
+  var tablelength = refertable.rows.length;
+  for (let t = 1; t < tablelength; t++) {
+    var sensitivity = parseInt(refertable.rows[t].cells.item(0).innerHTML);
+    if (sensitivity > minRsl) {
+      txpower = refertable.rows[t - 1].cells.item(7).innerHTML;
+      break;
+    }
+  }
+  differenceTx = txpower1 - txpower;
+  newrsl1 = rsl1 - differenceTx;
+  newsnr1 = newrsl1 + noisefloor;
+  console.log(`New RSL calculated is: ${newrsl1}, new SNR is ${newsnr1}`);
+  for (let t = 1; t < tablelength; t++) {
+    var sensitivity = parseInt(refertable.rows[t].cells.item(0).innerHTML);
+    if (sensitivity > newrsl1) {
+      rslIndex = t - 1;
+      rslMatched = true;
+      break;
+    }
+  }
+  for (let t = 1; t < tablelength; t++) {
+    var minSNR = parseInt(refertable.rows[t].cells.item(1).innerHTML);
+    if (minSNR > newsnr1) {
+      snrIndex = t - 1;
+      snrMatched = true;
+      break;
+    }
+  }
+  console.log(snrMatched, rslMatched, snrIndex, rslIndex);
+  if (rslMatched && snrMatched) {
+    mainIndex = Math.min(rslIndex, snrIndex);
+    mcs = refertable.rows[mainIndex].cells.item(2).innerHTML;
+    throughput = refertable.rows[mainIndex].cells.item(6).innerHTML;
+  }
+  if (maxMcs < mcs) {
+    $("#maxThroughputMcs").html(
+      `Note:- Throughput of ${throughput} Mbps (MCS ${mcs}) can also be achieved, if desired.`
+    );
+  } else {
+    $("#maxThroughputMcs").html("");
   }
 }
 
@@ -555,13 +629,14 @@ function availability() {
       Math.pow(linkdist, 3) *
       Math.pow(10, -(flat_fade_margin / 10));
 
-    var linkAvailability = 100 * (1 - 2 * outageDueToFading);
+    var linkAvailability = (100 * (1 - 2 * outageDueToFading)).toFixed(4);
     console.log("fading occurance factor", linkAvailability);
+
+    linkAvailability = linkAvailability === 100 ? 100 : linkAvailability;
 
     //  populating the link availability column with the value calculated
     document.getElementById("reportlinkAvailability").innerHTML =
-      linkAvailability.toFixed(4) + " ";
-    document.getElementById("linkAvailability").innerHTML =
-      linkAvailability.toFixed(4);
+      linkAvailability + " ";
+    document.getElementById("linkAvailability").innerHTML = linkAvailability;
   }
 }

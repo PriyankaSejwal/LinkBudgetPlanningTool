@@ -73,10 +73,16 @@ $("#interference-val").change(function () {
       var cinr2 = (parseFloat(rsl2) + parseFloat(interference)).toFixed(2);
       $(`#cinr1`).html(cinr1);
       $(`#cinr2`).html(cinr2);
+      $(`#reportcinr1`).html(cinr1);
+      $(`#reportcinr2`).html(cinr2);
     } else {
       console.log("rsl1 and rsl2 are not present.");
     }
   } else {
+    $(`.interference-container`).css("display", "none");
     $(".cinr-hidden").css("display", "none");
+    $(`#cinr1`).html("");
+    $(`#reportcinr1`).html("");
+    $(`#reportcinr2`).html("");
   }
 });

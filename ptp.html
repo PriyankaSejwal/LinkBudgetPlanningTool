@@ -42,6 +42,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <!-- Internal CSS -->
     <link type="text/css" rel="stylesheet" href="css/main/navbar.css" />
     <link type="text/css" rel="stylesheet" href="css/ptp/style.css">
@@ -57,8 +58,8 @@
     <div class="wrapper">
       <div class="header print-hide">
         <!-- Top Header for Search Result -->
-        <div class="top-head">
-          <div class="container">
+        <!-- <div class="top-head">
+          <div class="container-fluid">
             <div class="topheadflex">
               <a href="https://io.hfcl.com/contact-us" class="active"
                 >Contact Us</a
@@ -82,18 +83,17 @@
               </div>
             </form>
           </div>
-        </div>
+        </div> -->
         <!-- Bottom Header -->
         <div class="bottom-head">
-          <div class="container">
+          <div class="container-fluid">
             <div class="bottomheadflex">
               <!-- HFCL LOGO -->
               <div class="logo">
                 <a href="https://io.hfcl.com">
                   <img
-                    src="images/IO-logo-new.png"
+                    src="images/logo_new.svg"
                     alt="io-logo"
-                    width="124px"
                   />
                 </a>
               </div>
@@ -135,7 +135,7 @@
     <!-- Nav Bar Ends -->
 
     <!-- PTP/PTMP Selection Body Starts -->
-    <div class="container-fluid print-hide">
+    <div class="container-fluid print-hide padding-top">
         <div class="row">
           <!-- PTP Page -->
           <div class="col-lg-4 overlay-section" id="ptpPage">
@@ -369,7 +369,7 @@
                     <!-- Name to be given to the link  -->
                     <div class="row">
                       <div class="col-12 sidebar-padding">
-                        <label for="" class="label">Link Name</label>
+                        <label for="">Link Name</label>
                         <input
                           type="text"
                           class="input"
@@ -383,7 +383,7 @@
                      <!-- Any relevant information if user wants to enter for the Sites  -->
                      <div class="row">
                       <div class="col-6 sidebar-padding">
-                        <label for="" class="label">Site A Name</label>
+                        <label for="">Site A Name</label>
                         <input
                           type="text"
                           class="input"
@@ -394,7 +394,7 @@
                         />
                       </div>
                       <div class="col-6 sidebar-padding">
-                        <label for="" class="label">Site B Name</label>
+                        <label for="" >Site B Name</label>
                         <input
                           type="text"
                           class="input"
@@ -413,41 +413,38 @@
                     <!-- Sidebar Section for the subscribed bandwidth -->
                     <div class="row">
                       <div class="col-12 sidebar-padding">
-                        <label for="" class="label">Planned Capacity</label>
+                        <label for="" >Planned Capacity</label>
                         <input 
                           type="text" 
                           class="input" 
                           required
                           id="subscribedBandwidth" 
-                          placeholder="Subscribed Bandwidth"
+                          placeholder="Desired Throughput"
                         />
                         <span class="metre">Mbps</span>
                         <strong class="emptySubscriberBwAlert warningAlert">Please enter valid value</strong>
                         <strong class="subscribedBandwidthAlert warningAlert">Not feasible with current bandwidth.</strong>
                       </div>
                     </div>
-                    <div class="row justify-content-end ">
+                    <div class="row text-align-end">
                       <div class="col-9 sidebar-padding interference-container">
                         <input type="text" class="input" required id="interference-val" placeholder="Interference">
                         <span class="metre">dBm</span>
                       </div>
                       <div class="col-3 sidebar-padding">
-                        <label class="label" id="add-interference">Interference?</label>
+                        <label id="add-interference" class="mouse-pointer">Interference?</label>
                       </div>
                     </div>
                   </div>
                 </div>
                 <!-- Sidebar Section 1 -->
                 <!--Start of Sidebar section 1 contains address and tower and height inputs -->
-                <div class="sidebar-section">
-                  <div class="sidebar-section-body">
-                    <!-- Inputs for the addresses  -->
-                    <!-- <div class="input-grid"> -->
-                    <!-- For address division -->
-                    <div class="row">
+                <div class="sidebar-section" id="address-container">
+                  <div class="sidebar-section-body">   
+                    <div class="row" id="addressFields">
                       <!-- First input for address 1 -->
                       <div class="col-6 sidebar-padding">
-                        <label for="channelBandwidth" class="label">Site A</label>
+                        <label for="add1" >Site A</label>
                         <!-- <div class="input-grid-col-5"> -->
                         <input
                           type="text"
@@ -461,7 +458,7 @@
                       </div>
                       <!-- Second input for address 2 -->
                       <div class="col-6 sidebar-padding">
-                        <label for="channelBandwidth" class="label">Site B</label>
+                        <label for="add2">Site B</label>
                         <!-- <div class="input-grid-col-5"> -->
                         <input
                           type="text"
@@ -473,18 +470,27 @@
                         <!-- </div> -->
                       </div>
                     </div>
-                    <!-- </div> -->
-  
-                    <!-- End for the input of adrresses -->
-  
-                    <!-- Inputs for the tower locations and the heights -->
-                    <!-- <div class="input-grid"> -->
-                    <!-- For towers col 1 -->
-                    <div class="row">
+                    <div class="row text-align-end">
+                      <div class="col-12 sidebar-padding ">
+                        <label for="openLatLongFields" class="mouse-pointer">Add Lat long instead</label>
+                        <input type="checkbox" name="" id="openLatLongFields" class="mouse-pointer">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End of sidebar section 1 containing address tower -->
+
+
+                <!-- Sidebar Section for the lat long fields-->
+                <div class="sidebar-section" id="latlng-container">
+                  <div class="sidebar-section-body">
+                     <!-- For towers col 1 -->
+                     <div class="row" id="latLongFields">
                       <!-- LAtlong of Site A -->
                       <div class="col-6 sidebar-padding">
                         <!-- <label for="channelBandwidth" class="label">Tower</label> -->
                         <!-- <div class="input-grid-col-5"> -->
+                        <label for="searchtower1">Site A</label>
                         <input
                           type="text"
                           class="input"
@@ -498,6 +504,7 @@
                       <div class="col-6 sidebar-padding">
                         <!-- <label for="channelBandwidth" class="label">Tower</label> -->
                         <!-- <div class="input-grid-col-5"> -->
+                        <label for="searchtower2">Site B</label>
                         <input
                           type="text"
                           class="input"
@@ -508,8 +515,26 @@
                         <!-- </div> -->
                       </div>
                     </div> 
-                    <!-- The hidden row which will contain the decimal formatted co-ordinate which will not be visible -->
-                    <div class="row" hidden>
+                    <div class="row text-align-end">
+                       <!-- button which gets active when lat long details and subscribed bandwidth details are provided -->
+                   
+                       <div class="col-8 sidebar-padding validate-section">
+                        <button type="button" id="latLongBtn" class="btn btn-validate margin-right" disabled>Calculate</button>
+                      </div>
+                      <div class="col-4 sidebar-padding ">
+                        <label for="openAddressFields" class="mouse-pointer">Add Address</label>
+                        <input type="checkbox" name="" id="openAddressFields" class="mouse-pointer">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- start of sidebar section for the button to click and the hidden 
+                  lat long fields where we store the decimal value -->
+                  <div class="sidebar-section" hidden>
+                    <div class="sidebar-section-body">
+                       <!-- The hidden row which will contain the decimal formatted co-ordinate which will not be visible -->
+                    <div class="row">
                       <!-- LAtlong of Site A -->
                       <div class="col-6 sidebar-padding">
                         <!-- <label for="channelBandwidth" class="label">Tower</label> -->
@@ -537,20 +562,10 @@
                         <!-- </div> -->
                       </div>
                     </div>
-
-                    <!-- button which gets active when lat long details and subscribed bandwidth details are provided -->
-                    <div class="row">
-                      <div class="col-12 sidebar-padding validate-section">
-                        <button type="button" id="latLongBtn" class="btn btn-validate" disabled>Calculate</button>
-                      </div>
                     </div>
-                    <!-- </div> -->
-                    <!-- End of the inputs for the tower location  -->
                   </div>
-                </div>
-                <!-- End of sidebar section 1 containing address tower -->
   
-                <!-- Start of Sidebar Section 2 -->
+                <!-- Start of Sidebar Section for Channel Bandwidth and the Channel Frequency -->
                 <!-- Contains all the options to choose from say - bandwidth, frequency, radio, cable loss, transmit power-->
                 <div class="sidebar-section">
                   <div class="sidebar-section-body">
@@ -558,7 +573,7 @@
                       <!-- Row for bandwidth and frequency -->
                     <div class="row">
                       <div class="col-6 sidebar-padding">
-                        <label for="">Channel Bandwidth</label>
+                        <label for="ptpchannelBandwidth">Channel Bandwidth</label>
                         <!-- <div> -->
                         <select
                           name=""
@@ -588,7 +603,7 @@
                       <div class="row" id="eirplevel">
                         <!-- Max EIRP  -->
                         <div class="col-12 sidebar-padding">
-                          <label for="" class="label">Max EIRP</label>
+                          <label for="" >Max EIRP</label>
                           <input
                             type="text"
                             name=""
@@ -603,7 +618,7 @@
                     <div class="row">
                       <!-- Radio A -->
                       <div class="col-6 sidebar-padding">
-                        <label for="" class="label">Radio</label>
+                        <label for="" >Radio</label>
                         <!-- <div> -->
                         <select
                           name=""
@@ -640,7 +655,7 @@
                       </div>
                       <!-- Radio B -->
                       <div class="col-6 sidebar-padding top-margin">
-                        <label for="" class="label">
+                        <label for="" >
                           <!-- <img src="images/icons8-add-20.png" alt=""> -->
                         </label>
                         <!-- <div> -->
@@ -683,7 +698,7 @@
                     <div class="row" id="hiddenGain">
                       <!-- Antenna gain A -->
                       <div class="col-6 sidebar-padding">
-                        <label for="" class="label">Antenna Gain</label>
+                        <label for="">Antenna Gain</label>
                         <input
                           type="number"
                           name=""
@@ -698,7 +713,7 @@
                       </div>
                       <!-- Antenna Gain B -->
                       <div class="col-6 sidebar-padding top-margin">
-                        <label for="" class="label"></label>
+                        <label for="" ></label>
                         <input
                           type="number"
                           name=""
@@ -715,7 +730,7 @@
                     <div class="row">
                       <!-- Cable Loss A -->
                       <div class="col-6 sidebar-padding">
-                        <label for="" class="label">Cable Loss</label>
+                        <label for="" >Cable Loss</label>
                         <input
                           type="number"
                           name=""
@@ -733,7 +748,7 @@
                       </div>
                       <!-- Cable loss B -->
                       <div class="col-6 sidebar-padding top-margin">
-                        <label for="" class="label"></label>
+                        <label for="" ></label>
                         <input
                           type="number"
                           name=""
@@ -766,7 +781,7 @@
                     <div class="row">
                       <!-- Calculated Transmit Power A -->
                       <div class="col-6 sidebar-padding">
-                        <label for="" class="label">Transmit Power</label>
+                        <label for="">Transmit Power</label>
                         <input
                           type="number"
                           name=""
@@ -783,7 +798,7 @@
                       </div>
                       <!-- Calculated Transmit power B -->
                       <div class="col-6 sidebar-padding top-margin">
-                        <label for="" class="label"></label>
+                        <label for=""></label>
                         <input
                           type="number"
                           name=""
@@ -795,15 +810,15 @@
                           required
                         />
                         <span class="metre">dBm</span>
-                        <strong class="tx2Alert" style="display:none">Less than 3. Please adjust ant. gain/ cable loss.</strong>
-                        <strong class="tx2Alert2" style="display:none">Out of Range</strong>
+                        <strong class="tx2Alert warningAlert" style="display:none">Less than 3. Please adjust ant. gain/ cable loss.</strong>
+                        <strong class="tx2Alert2 warningAlert" style="display:none">Out of Range</strong>
                       </div>
                     </div>
                       <!-- For height -->
                       <div class="row">
                       <!-- Height of tower A -->
                       <div class="col-6 sidebar-padding">
-                        <label for="channelBandwidth" class="label">Height</label>
+                        <label for="channelBandwidth" >Height</label>
                         <!-- <div class="input-grid-col-5"> -->
                         <input
                           type="text"
@@ -819,7 +834,7 @@
                       <!-- Height for tower B -->
                       <div class="col-6 sidebar-padding top-margin">
                         <!-- <div class="input-grid-col-5"> -->
-                        <label for="channelBandwidth" class="label"></label>
+                        <label for="channelBandwidth"></label>
                         <input
                           type="text"
                           class="input"
@@ -845,8 +860,8 @@
                     <label for="" class="ptp-sidebar-section-title"
                       >Link Summary</label
                     >
-                    <a href="#" class="addRadioClass"><img src="images/icons8-add-20.png" alt="" id="openNewRadioForm"></a>
-                    <span class="radioAdditionTooltip">Add a new Radio</span>
+                    <!-- <a href="#" class="addRadioClass"><img src="images/icons8-add-20.png" alt="" id="openNewRadioForm"></a>
+                    <span class="radioAdditionTooltip">Add a new Radio</span> -->
                   </header>
                   <!-- Body of the link summary -->
                   <!-- Empty class emties the innerHtML when radio is ion4le i.e. ant gain is 0 -->
@@ -941,6 +956,11 @@
                         </form> 
                         </tbody>
                       </table>
+                    </div>
+                    <!-- A section which tells us about the maximum achievable 
+                      throughput and MCS which can be locked -->
+                    <div class="informationMaxMcs">
+                      <p id="maxThroughputMcs"></p>
                     </div>
   
                     <div class="align-center">
@@ -1321,6 +1341,17 @@
                           </td>
                           <td>
                             <span id="reportsnr2"></span>
+                            <span>dB</span>
+                          </td>
+                        </tr>
+                        <tr class="cinr-hidden">
+                          <th>CINR</th>
+                          <td>
+                            <span id="reportcinr1"></span>
+                            <span>dB</span>
+                          </td>
+                          <td>
+                            <span id="reportcinr2"></span>
                             <span>dB</span>
                           </td>
                         </tr>
@@ -2839,6 +2870,7 @@
             <td>5/6</td>
             <td>2402</td>
             <td>1681.4</td>
+            
           </tr>
         </table> -->
       </div>
@@ -2859,13 +2891,14 @@
     <script src="javascript/ptp/queryselect.js"></script>
     <script src="javascript/ptp/newradio.js"></script>
     <script src="javascript/ptp/newradiovalidation.js"></script>
-    <script src="javascript/ptp/newfademargin.js"></script>
+    <script src="javascript/ptp/userThroughputInterference.js"></script>
+    <script src="javascript/ptp/sitedetailcontainer.js"></script>
     
     <!-- GitHub Link-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi6LKXKlcIJV5DHJDPAFB45gYDbYCiM80&libraries=places&callback=ptpMap"></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi6LKXKlcIJV5DHJDPAFB45gYDbYCiM80&libraries=places&callback=ptpMap"></script> -->
 
      <!-- internal api -->
-     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=API&libraries=places&callback=ptpMap"></script> -->
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmCFK8l5e83wNqK_1gll7WEhplgMgvnqc&libraries=places&callback=ptpMap"></script>
     <script src="javascript/ptp/placesapi.js"></script>
   </body>
 </html>

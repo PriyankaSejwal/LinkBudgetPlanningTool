@@ -7,11 +7,11 @@
   border-bottom: 1px solid #fff;
 }
 .sidebar-section-body {
-  padding: 9px 8px;
+  padding: 6px 8px;
   /* padding-right: 10px; */
 }
-.container-fluid {
-  padding-top: 110px;
+.padding-top {
+  padding-top: 80px;
 }
 .overlay-section {
   overflow: hidden;
@@ -23,7 +23,7 @@
   position: relative;
   /* display: flex; */
   /* width: 100%; */
-  height: 491px;
+  height: calc(100vh - 127px);
   /* overflow: hidden; */
   overflow-y: scroll;
   font-size: 13px;
@@ -35,11 +35,11 @@
 
 label {
   /* padding-left: 3px; */
-  color: #350964 !important;
-  font-weight: 500 !important;
-  font-size: 14px !important;
-  line-height: 1.5 !important;
-  padding: 0 !important;
+  color: #350964;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 0;
 }
 
 .input {
@@ -55,7 +55,7 @@ label {
   height: 30px;
   color: #54585a;
   -webkit-text-fill-color: #54585a;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 500;
   text-align: left;
   letter-spacing: 0.05em;
@@ -73,19 +73,33 @@ input[type="number"]::-webkit-inner-spin-button {
   appearance: none;
   -webkit-appearance: none;
 }
+
+#address-container {
+  display: none;
+}
+
+.mouse-pointer {
+  cursor: pointer;
+}
+
+/* container for checkbox */
+.text-align-end {
+  text-align: end;
+  justify-content: end;
+}
 /* interference container */
 .interference-container {
   display: none;
 }
-/* the button calculate which is disbaled till lat long entered for both sides */
+/* the button calculate which is disabled till lat long entered for both sides */
 .validate-section {
-  text-align: center !important;
+  text-align: end;
 }
 
 .sidebarBody2 select,
 .mob-hide select {
   outline: none;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   width: 100%;
   font-weight: 500;
   padding: 4px;
@@ -126,7 +140,7 @@ input[type="number"]::-webkit-inner-spin-button {
   cursor: text;
 }
 .top-margin {
-  margin-top: 21px;
+  margin-top: 7px;
 }
 strong {
   color: red;
@@ -156,6 +170,10 @@ strong {
   font-size: 14px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+/* lat long button margin */
+.validate-section .margin-right {
+  margin-right: 23px;
 }
 .refresh {
   color: #350964;
@@ -207,6 +225,10 @@ strong {
 .cinr-hidden {
   display: none;
   /* opacity: 0; */
+}
+
+.informationMaxMcs p {
+  margin: 0;
 }
 
 /* Link Report Button */
