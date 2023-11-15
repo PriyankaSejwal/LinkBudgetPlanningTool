@@ -19,12 +19,22 @@
 }
 @media screen and (min-height: 1100px) {
   .map-section {
-    height: 40em;
+    height: 44em;
   }
 }
 @media screen and (max-width: 992px) {
   .map-section {
+    height: 45em;
+  }
+}
+@media screen and (max-width: 750px) {
+  .map-section {
     height: 30em;
+  }
+}
+@media screen and (max-width: 500px) {
+  .map-section {
+    height: 25em;
   }
 }
 /*   

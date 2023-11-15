@@ -36,6 +36,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <!-- link to read the excel csv -->
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
     <script src="xlsx.full.min.js"></script>
@@ -44,7 +45,6 @@
     <link rel="stylesheet" href="css/bulkptp/navbar.css" />
     <link rel="stylesheet" href="css/bulkptp/style.css">
     <link rel="stylesheet" href="css/bulkptp/ctryselectsection.css" />
-    <link rel="stylesheet" href="css/bulkptp/navbar.css">
     <link rel="stylesheet" href="css/bulkptp/responsive.css">
     <link rel="stylesheet" href="css/bulkptp/map.css">
     <link rel="stylesheet" href="css/bulkptp/report.css">
@@ -55,8 +55,8 @@
     <div class="wrapper">
       <div class="header print-hide">
         <!-- Top Header for Search Result -->
-        <div class="top-head">
-          <div class="container">
+        <!-- <div class="top-head">
+          <div class="container-fluid">
             <div class="topheadflex">
               <a href="https://io.hfcl.com/contact-us" class="active"
                 >Contact Us</a
@@ -80,10 +80,10 @@
               </div>
             </form>
           </div>
-        </div>
+        </div> -->
         <!-- Bottom Header -->
         <div class="bottom-head">
-          <div class="container">
+          <div class="container-fluid">
             <div class="bottomheadflex">
               <!-- HFCL LOGO -->
               <div class="logo">
@@ -131,7 +131,7 @@
       <!-- Navbar ends -->
     </div>
     <!-- main container starts -->
-    <div class="container-fluid print-hide">
+    <div class="container-fluid print-hide padding-top">
         <div class="row">
             <div class="col-lg-4 overlay-section" id="importPTPPage">
                 <div class="sidebar-section">
@@ -460,7 +460,7 @@
                 onchange="downloadExport()"
               >
                 <option value="" hidden>Export</option>
-                <option value="print">Print / Download</option>
+                <!-- <option value="print">Print / Download</option> -->
                 <option value="excel">Export To Excel</option>
               </select>
             </div>
@@ -1865,7 +1865,7 @@
     <script src="javascript/bulkptp/exporttoexcel.js"></script>
       <!-- internal api -->
       <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmCFK8l5e83wNqK_1gll7WEhplgMgvnqc&libraries=places&callback=initMap&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi6LKXKlcIJV5DHJDPAFB45gYDbYCiM80&libraries=places&callback=initMap&v=weekly"
     ></script>
   </body>
 </html>

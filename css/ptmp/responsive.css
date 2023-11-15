@@ -1,12 +1,6 @@
 /* Nav Bar Responsiveness */
 
 @media screen and (max-width: 300px) {
-  .header {
-    height: 80px;
-  }
-  .container-fluid {
-    padding-top: 85px !important;
-  }
   .sidebar-section .btn {
     padding: 3px 8px;
     font-size: 14px;
@@ -32,12 +26,20 @@
     padding: 0px 10px 5px 5px;
   }
 }
+@media screen and (max-width: 1500px) {
+  .header {
+    height: 81px;
+  }
+  .padding-top {
+    padding-top: 67px;
+  }
+}
 @media screen and (max-width: 992px) {
   .header {
-    height: 110px;
+    height: 79px;
   }
-  .container-fluid {
-    padding-top: 110px !important;
+  .padding-top {
+    padding-top: 79px;
   }
   /* .bottom-head {
     margin-top: 6px;
@@ -45,18 +47,26 @@
 }
 @media screen and (max-width: 750px) {
   .header {
-    height: 105px;
+    height: 74px;
   }
-  .container-fluid {
-    padding-top: 105px !important;
+  .padding-top {
+    padding-top: 73px;
   }
 }
 @media screen and (max-width: 550px) {
   .header {
-    height: 80px;
+    height: 49px;
   }
-  .container-fluid {
-    padding-top: 80px !important;
+  .padding-top {
+    padding-top: 48px;
+  }
+}
+@media screen and (max-width: 300px) {
+  .header {
+    height: 55px;
+  }
+  .padding-top {
+    padding-top: 54px;
   }
 }
 /* @media screen and (max-width: 920px) {
@@ -288,7 +298,7 @@
 @media screen and (max-width: 920px) {
   .mainmenu .menuoutbox ul li span {
     line-height: 30px;
-    color: #808285;
+    color: #140f15;
     display: block;
     position: relative;
     font-size: 25px;
@@ -302,7 +312,7 @@
 @media screen and (max-width: 1300px) {
   .mainmenu .menuoutbox ul li span {
     line-height: 30px;
-    color: #808285;
+    color: #140f15;
     display: block;
     position: relative;
     font-size: 25px;
@@ -417,10 +427,11 @@
 
 @media screen and (max-width: 1500px) {
   .overlay-section {
-    height: 547px;
+    /* height: 547px; */
   }
   .sidebarBody2 {
-    height: 496px;
+    /* height: 496px; */
+    height: calc(100vh - 132px);
   }
 }
 
@@ -435,19 +446,19 @@
 
 @media screen and (max-width: 1280px) and (min-height: 799px) {
   .overlay-section {
-    height: 690px;
+    height: 718px;
   }
   .sidebarBody2 {
-    height: 639px;
+    height: 667px;
   }
 }
 
 @media screen and (max-width: 1024px) {
   .overlay-section {
-    height: 490px;
+    height: 519px;
   }
   .sidebarBody2 {
-    height: 439px;
+    height: 467px;
   }
 }
 

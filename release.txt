@@ -64,4 +64,26 @@
     To do this three files were changed: functions.js added the map listener, mastermap.js added a function which will
     add the lat long details in the respective fields and mastercoveragesector.js the polygon placing code has been given
     an attribute "clickable:false"
-    
+
+12-10-2023
+7. Extended the Cooridnates format support
+Support for co-ordinate format is now extended. Tool supports following formats-
+1. Decimal/decimal degree (21.042547, 74.487386 / 21.042547°, 74.487386°)
+2. DMS - (28° 34' 46.4184'' N,77° 12' 46.0056'' E / 28 34 46.4184 N,77 12 46.0056 E)
+DMS where the coordinates has special characters. DMS where the special characters are replaced with space.
+
+13-10-2023
+8. Address and lat long fields to enter the site details both were visible which might not be intuitive enough for
+user to know that either of the two is required. so, uograded the code. now onlu one field is visible and user
+can switch to the other method of entering details.
+
+15-10-2023
+9. The navbar was not in sync when the display was zoomed out. max-width has been set to 100% to have the 
+containers occupy viewport width when zoomed out.
+
+27-10-2023
+10. Height of the tool was not properly aligned with the viewport so when we zoomed out the window the
+tool height was not adjusting itself according to the new size. Now it will adjust its height as per the 
+viewport size. 
+Changes were made to the PTP PTMP and bulk planning as well.
+

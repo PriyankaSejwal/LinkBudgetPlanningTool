@@ -7,9 +7,9 @@ body {
   font-size: 16px;
   box-sizing: border-box;
   background: transparent;
-  color: #545454;
-  font-family: "Poppins", sans-serif;
-  max-width: 1400px;
+  color: #140f15;
+  font-family: "Roboto", sans-serif;
+  max-width: 100%;
 }
 
 /* Loader CSS */
@@ -41,8 +41,9 @@ body {
   z-index: 9;
   width: 100%;
   padding: 0px;
-  height: 110px;
-  max-width: 1400px;
+  height: 81px;
+  margin: 0 auto;
+  max-width: 100%;
 }
 .top-head {
   width: 100%;
@@ -77,9 +78,9 @@ button {
   font-size: 14px;
   font-weight: 400;
   padding: 7.5px 0px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   display: block;
-  color: #808285;
+  color: #140f15;
 }
 .topheadflex a:active,
 .topheadflex a:hover {
@@ -108,7 +109,7 @@ button {
 .search-bar form .form-control {
   font-size: 15px;
   box-shadow: none;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   color: #555;
   border: 1px solid #ccc;
   /* border-bottom-left-radius: 6px;
@@ -208,7 +209,7 @@ button {
   color: #fff;
   padding: 5px;
   line-height: 20px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   display: block;
   font-size: 14px;
   font-weight: 400;

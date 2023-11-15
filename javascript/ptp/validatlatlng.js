@@ -13,23 +13,28 @@ function dmsddCheck(i) {
   coord = $(`#searchtower${i}`).val();
   if (coord != "") {
     if (coord.includes(",")) {
-      var lat = coord.split(",")[0];
-      var long = coord.split(",")[1];
+      var lat = coord.split(",")[0].trim();
+      var long = coord.split(",")[1].trim();
       if (long != " ") {
         // Regular expression to match DMS format (e.g. 40°26'46.302"N)
         // const dmsPattern =
         //   /^\s?-?\d{1,3}[°]\d{1,2}[']\d{1,2}(\.\d+)?["][NSWE]\s?$/i;
 
         // dms pattern which assumes that there can or cannot be one or many space after the dms symbols \s*?
+        // const dmsPattern =
+        //   /^\s?-?\d{1,3}[° ]\s*?\d{1,2}[' ]\s*?\d{1,2}(\.\d+)?[" ]\s*?[NSWE]\s?$/i;
+
         const dmsPattern =
-          /^\s?-?\d{1,3}[°]\s*?\d{1,2}[']\s*?\d{1,2}(\.\d+)?["]\s*?[NSWE]\s?$/i;
+          /^\s?-?\d{1,3}[°]\s*?|\s*\d{1,2}[']\s*?|\s*?\d{1,2}(\.\d+)?["]|['']|\s*?[NSWE]\s?$/i;
 
         // Regular expression to match DD format (e.g. 40.446195, -79.948862)
         const ddPattern = /^\s?-?\d+(\.\d+)?°?\s?$/;
         if (dmsPattern.test(lat) && dmsPattern.test(long)) {
-          var splitlat = lat.split(/[^\d\w\.\-\ ]+/);
+          console.log("Lat long before split are: ", lat, long);
+          var splitlat = lat.split(/[^\d\w\.\-]+/);
           var ddlat = dmsToDD(splitlat);
-          var splitlong = long.split(/[^\d\w\.\-\ ]+/);
+          var splitlong = long.split(/[^\d\w\.\-]+/);
+          console.log("Latitude longitude splitted", splitlat, splitlong);
           var ddlong = dmsToDD(splitlong);
           $(`#decimal${i}`).val(ddlat + ", " + ddlong);
           // function to check the lat long bouds of the country
@@ -42,7 +47,9 @@ function dmsddCheck(i) {
           validatecoord(ddlat, ddlong, i);
         }
       } else {
-        window.alert("Invalid coordinate format");
+        window.alert(
+          `Co-ordinates must be of degree (40.446195, 79.948862) or DMS (28°32'41.2"N, 77°11'23.5"E) format`
+        );
       }
     }
   }
@@ -90,10 +97,20 @@ function validatecoord(lat, long, i) {
     $("#ptpchart").html("");
     // removing the coordinate input
     $(`#searchtower${i}`).val("");
-    $(`#decimal${i}`).val("");
+    // $(`#decimal${i}`).val("");
     $(`#add${i}`).val("");
     alert(`Lat long of Site ${i} does not belong to ${selectedctry}`);
   }
+}
+// function to convert dms to decimal
+function dmsToDD(splitvalue) {
+  var [deg, min, sec, direction] = splitvalue;
+  var dd = Number(deg) + Number(min) / 60 + Number(sec) / (60 * 60);
+  console.log(dd);
+  if (direction == "S" || direction == "W") {
+    dd = dd * -1;
+  } // Don't do anything for N or E
+  return dd;
 }
 // function which will check for the non null value of site A , site B and subscriber badnwdith
 function buttonActive() {
@@ -169,17 +186,6 @@ function buttonActive() {
 //       }
 //     });
 //   inputMarker();
-// }
-
-// function to convert dms to decimal
-// function dmsToDD(splitvalue) {
-//   var [deg, min, sec, direction] = splitvalue;
-//   var dd = Number(deg) + Number(min) / 60 + Number(sec) / (60 * 60);
-//   console.log(dd);
-//   if (direction == "S" || direction == "W") {
-//     dd = dd * -1;
-//   } // Don't do anything for N or E
-//   return dd;
 // }
 
 /* validate address is called in the function inputMarker to check whether the 

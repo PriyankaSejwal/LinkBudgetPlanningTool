@@ -9,7 +9,7 @@
   box-shadow: inset 0 1px 2px rgb(0 0 0 / 10%);
   border: 1px solid #d6d6d6;
   border-radius: 4px;
-  color: #54585a;
+  color: #140f15;
   outline: none;
   background-color: transparent;
   cursor: pointer;
@@ -31,8 +31,8 @@
   border-radius: 4px;
   background-color: white;
   border: 1px solid #ccc;
-  color: #54585a;
-  font-family: "Poppins", sans-serif;
+  color: #140f15;
+  font-family: "Roboto", sans-serif;
   font-size: 15px;
 }
 .btn:hover {
@@ -44,8 +44,8 @@ button {
   padding: 5px;
   background-color: #fff;
   border: 1px solid #d6d6d6;
-  color: #54585a;
-  font-family: "Poppins", sans-serif;
+  color: #140f15;
+  font-family: "Roboto", sans-serif;
   font-size: 14px;
   border-radius: 5px;
   letter-spacing: 0.05em;
