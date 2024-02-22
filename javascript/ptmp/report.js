@@ -28,6 +28,8 @@ $("#reportButton").click(function () {
     // elevation chart
     $(`#slave${i}ReportElevation`).html($(`#slave${i}Elevation`).html());
   }
+  // know the current map view type
+  reportMap.setMapTypeId(map.getMapTypeId());
 
   $(".popup").fadeIn();
   $(".mainContainer").fadeOut();

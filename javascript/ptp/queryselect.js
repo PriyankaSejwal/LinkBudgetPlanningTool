@@ -9,7 +9,8 @@ document.getElementById("antgain1").addEventListener("change", function () {
       r1.options[r1.selectedIndex].value = antgain1;
       // console.log(document.getElementById("radio1").value);
       document.querySelector(".gain1Alert").style.display = "none";
-      calcTxPower();
+      updateTransmitPower(1);
+      deviceinfo();
     } else {
       antgain1 = 0;
       document.querySelector(".gain1Alert").style.display = "block";
@@ -29,7 +30,8 @@ document.getElementById("antgain2").addEventListener("change", function () {
       var r2 = document.getElementById("radio2");
       r2.options[r2.selectedIndex].value = antgain2;
       document.querySelector(".gain2Alert").style.display = "none";
-      calcTxPower();
+      updateTransmitPower(2);
+      deviceinfo();
     } else {
       antgain2 = 0;
       document.querySelector(".gain2Alert").style.display = "block";
@@ -77,6 +79,8 @@ document.getElementById("ptpresetLink").addEventListener("click", function () {
 
   //  Calling EIRP function to get the EIRP value lost during resetting the form.
   ptpfrequencydata();
+  // check radios for the table reference
+  checkRadios();
 
   // document.querySelector(".elevation-chart").style.display = "none";
   $(".editPencil").hide();

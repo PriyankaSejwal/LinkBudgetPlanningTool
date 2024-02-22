@@ -125,7 +125,7 @@ function checkMasterBounds(latitude, longitude) {
     }
     // disabling the installation report button
     $(`#reportButton`).prop("disabled", true);
-    $(`#addAnotherSlave`).prop("disbaled", true);
+    $(`#addAnotherSlave`).prop("disabled", true);
     window.alert("Site co-ordinates doesnot belong to the country selected.");
   }
 }

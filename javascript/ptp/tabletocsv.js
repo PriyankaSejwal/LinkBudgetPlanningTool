@@ -3,20 +3,32 @@ function downloadExport() {
   var val = selected.options[selected.selectedIndex].innerHTML;
   console.log("val");
   if (val == "Print / Download") {
-    var isChrome =
-      navigator.userAgent.toLowerCase().indexOf("chrome") >= 0 ? true : false;
-    if (isChrome) {
-      printMaps();
-    } else {
-      window.print();
-    }
+    beforePrint()
   } else if (val == "Export To Excel") {
     exportToExcel();
   }
   document.getElementById("ptpexports").selectedIndex = 0;
 }
 
+function beforePrint() {
+  console.log("this is before print function");
+  var linkPlanningName = $(`#linkName`).val();
+  window.onbeforeprint = function () {
+    console.log("on before print trigger");
+    // var style = document.createElement("style");
+    // style.nodeType = "text/css";
+    // style.innerHTML = "@page { size: auto; margin: 5mm; }";
+    // document.head.appendChild(style);
+
+    document.title = linkPlanningName; // Set custom name as the document title
+  };
+  window.print();
+  // Reset the beforeprint event for future prints
+  window.onbeforeprint = null;
+}
+
 function exportToExcel() {
+  var linkPlanningName = $(`#linkName`).val();
   var elt = document.getElementById("tbl1");
   var elt2 = document.getElementById("tbl2");
   var elt3 = document.getElementById("tbl3");
@@ -66,21 +78,16 @@ function exportToExcel() {
     rows[2].push(column2);
   }
   console.log(rows);
-  csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-  rows.forEach(function (rowArray) {
-    row = rowArray.join(",");
-    csvContent += row + "\r\n";
-  });
-  /* create a hidden <a> DOM node and set its download attribute */
-  var encodedUri = encodeURI(csvContent);
-  var link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "PTP_Report.csv");
-  document.body.appendChild(link);
-  /* download the data file named "Stock_Price_Report.csv" */
-  link.click();
-  // Removing the created child a in the body.
-  document.body.removeChild(link);
+  // new way to export to excel not csv
+  // Create a worksheet
+
+  var ws = XLSX.utils.aoa_to_sheet(rows);
+  // Create a workbook
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+  // Save the workbook as an Excel file
+  XLSX.writeFile(wb, linkPlanningName + ".xlsx");
 }
 
 function printMaps() {

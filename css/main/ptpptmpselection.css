@@ -131,3 +131,14 @@ ul.dropdown-menu a:hover {
     height: 544px;
   }
 }
+
+/* handling portrait mode ipad pro */
+@media only screen and (orientation: portrait) {
+  .content-holder {
+    display: block;
+  }
+  #ptpptmpselectionPage,
+  .map-section {
+    width: 100%;
+  }
+}

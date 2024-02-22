@@ -49,7 +49,7 @@ function masterTx() {
   // if tx power value in fied is less than the maxtx then we keep the field value as replace with maxtx
   // var txPower = mastertx < maxmastertxPower ? mastertx : maxmastertxPower;
   // now we will check the txpower with mx tx power allowed in the selected country
-  var mastertxPower = maxmastertxPower > maxtx ? maxtx : maxmastertxPower;
+  var mastertxPower = Math.min(maxmastertxPower, maxtx);
 
   $("#masterTxPower").val(mastertxPower);
   slaveMaxTxLimit[0] = mastertxPower;

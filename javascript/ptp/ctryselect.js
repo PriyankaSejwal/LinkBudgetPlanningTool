@@ -1,4 +1,9 @@
+/* when informztion for the coutnry is given the bandwidth based and country based upation of the frequency
+happens and the EIRP value is populated on the basis of the frequency and the country*/
 var ptpeirparray;
+$("#ptpctryCode").change(function () {
+  ptpctryChange();
+});
 function ptpctryChange() {
   // reset button now visible
   $("#ptp-container").removeClass("disable");
@@ -36,7 +41,6 @@ function ptpctryChange() {
   }
   // calculation start
   ptpeirparray = ptpeirplimits(cCode);
-  console.log(ptpeirparray);
   // function called which checks the radio selected and gives the class of the container of tables to refer
   checkRadios();
   /* calling function which gives us the array for the frequency range 
@@ -194,7 +198,6 @@ function ptpfrequencydata() {
     }
   }
   frequencyarray = arr;
-  console.log(arr);
   // calling function which will create data for the frequency dropdown
   createFreq(arr, stepsize);
 

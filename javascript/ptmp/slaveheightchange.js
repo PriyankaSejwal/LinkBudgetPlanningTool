@@ -7,6 +7,13 @@ function slaveHeightChange(iter) {
     slaveHeightChangeNoObs(iter);
   }
   availability(iter);
+  /*after height change for slave where los was not clear initially, we had throughput as N/A, 
+  as los now will get clear after heigth change we need to get the throughput value to do the 
+  calculations again */
+  throughputUpdationAfterHeightChange(iter);
+  ptmpMasterThroughput();
+  ptmpSlaveThroughput();
+  ULDLThroughput();
 }
 
 // slave height changed then single elevatin chart gets affected.
@@ -252,21 +259,6 @@ function slaveHeightChangeAfterObs(iter) {
     arr.push([distarray[i], elevationData[i]]);
   }
 
-  // checking for clear line of sight
-  // for (let i = 0; i < elevationData.length; i++) {
-  //   if (ellipsearray2[i][1] > elevationData[i]) {
-  //     $(`#LOS${iter}1`).html("Yes");
-  //     $(`#reportSlave${iter}LOS0`).html("Yes");
-  //     $(`#reportSlave${iter}LOS1`).html("Yes");
-  //     $(`#LOS${iter}1`).css({ color: "green" });
-  //   } else {
-  //     $(`#LOS${iter}1`).html("No");
-  //     $(`#reportSlave${iter}LOS0`).html("No");
-  //     $(`#reportSlave${iter}LOS1`).html("No");
-  //     $(`#LOS${iter}1`).css({ color: "red" });
-  //     break;
-  //   }
-  // }
   /* Now that we have obstruction data along with the elevation and fresnel, 
     instead of checking fresnel with elevation 
     we now check just the obstruction data, if obstruction is clear then elevation will also be clear*/
@@ -373,4 +365,37 @@ function slaveHeightChangeAfterObs(iter) {
   );
 
   chart.draw(obstructionjoined, options);
+}
+
+/* function which will be called after height change for the slaves where the thrroughput information because
+was N/A becuase of the link availability being N/A*/
+function throughputUpdationAfterHeightChange(iter) {
+  var linkAvailability = document.getElementById(
+    `Link Availability${iter}1`
+  ).innerHTML;
+  if (linkAvailability != "N/A") {
+    for (let j = 1; j <= 2; j++) {
+      // 0 for master 1 for slave
+      var rsl = parseFloat($(`#reportSlave${iter}RSL${j - 1}`).html());
+      var rowlength = refertable.rows.length;
+      for (let t = 1; t < rowlength; t++) {
+        var min = parseFloat(refertable.rows[t].cells.item(0).innerHTML);
+        var max = refertable.rows[t].cells.item(1).innerHTML;
+        if (rsl <= min) {
+          console.log(`rsl and sensitivity ${rsl} < ${min}`);
+          var throughput = refertable.rows[t - 1].cells.item(6).innerHTML;
+          throughputArr[j - 1][iter - 1] =
+            throughput == "N/A" ? 0 : throughput / 2;
+          console.log(
+            `For the slave ${iter}, ${j}-th iteration throughput array is ${throughputArr}`
+          );
+          break;
+        }
+      }
+    }
+  } else {
+    for (let j = 1; j <= 2; j++) {
+      throughputArr[j - 1][iter - 1] = 0;
+    }
+  }
 }

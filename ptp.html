@@ -20,12 +20,19 @@
       crossorigin="anonymous"
     ></script>
     <!-- JQuery Links -->
+    <!-- JQuery Links -->
     <link
       rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+     <!-- sheet js library -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"
+    ></script>
 
     <!-- Google Charts -->
     <script
@@ -92,7 +99,7 @@
               <div class="logo">
                 <a href="https://io.hfcl.com">
                   <img
-                    src="images/logo_new.svg"
+                    src="images/logo.svg"
                     alt="io-logo"
                   />
                 </a>
@@ -103,18 +110,18 @@
                 <div class="menuoutbox">
                   <div class="moblogobox">
                     <a href="https://io.hfcl.com">
-                      <img src="images/IO-logo-new.png" alt="io-logo" />
+                      <img src="images/logo.svg" alt="io-logo" />
                     </a>
                   </div>
                   <ul class="mobileulfix">
                     <li class="menuhover">
-                      <span>Link Planning Tool</span>
+                      <span>LinkXPert</span>
                     </li>
                   </ul>
                 </div>
                 <!-- Demo Button -->
                 <a href="https://io.hfcl.com/contact-us" class="getdemobtn"
-                  >Get a Demo</a
+                  >Book a Demo</a
                 >
                 <!-- Toggle Menu Hamburger Sign -->
                 <div class="togglemenus">
@@ -144,16 +151,18 @@
                 <div class="sidebar-section-body">
                   <div class="d-flex justify-content-between">
                     <!-- Button to cancel the selected country and reset button -->
-                    <div class="col-8" >
-                      <button type="button" class="ptplinkbtn btn" id="cancelp2p">
+                    <div class="col-lg-9 col-sm-8 p-0" >
+                      <div class="btn-group" role="group" aria-label="Cancel and Reste Buttons">
+                        <button type="button" class="ptplinkbtn btn" id="cancelp2p">
                         <a href="index.html">Go Back</a>
                       </button>
                       </button>
                       <button type="button" class="btn disable" id="ptpresetLink">Reset</button>
+                      </div>
                     </div>    
                     <!-- Choose the country -->
                     <div class="col-lg-3 col-sm-4 p-0 text-right">
-                      <select name="" id="ptpctryCode" onchange="ptpctryChange()">
+                      <select name="" id="ptpctryCode">
                         <option value="" selected disabled>Country</option>
                         <option value="af">Afghanistan</option>
                         <option value="ax">Alan Islands</option>
@@ -741,7 +750,6 @@
                           class="input disable"
                           disabled
                           required
-                          onchange="calcTxPower()"
                         />
                         <strong class="cable1Alert warningAlert">Value range 0-6 dB</strong> 
                         <span class="metre">dB</span>
@@ -759,7 +767,6 @@
                           class="input disable"
                           required
                           disabled
-                          onchange="calcTxPower()"
                         />
                         <span class="metre">dB</span>
                         <strong class="cable2Alert warningAlert" >Value range 0-6 dB</strong> 
@@ -826,7 +833,6 @@
                           id="aheight1"
                           value="15"
                           required
-                          onchange="heightUpdate()"
                         />
                         <span class="metre">m</span>
                         <!-- </div> -->
@@ -841,7 +847,6 @@
                           id="aheight2"
                           value="15"
                           required
-                          onchange="heightUpdate()"
                         />
                         <span class="metre">m</span>
                         <!-- </div> -->
@@ -970,7 +975,6 @@
                             type="button"
                             class="btn"
                             id="ptpreportbtn"
-                            onclick="reportMarker()"
                             disabled
                           >
                             Installation Report
@@ -1112,7 +1116,7 @@
             <!-- col-lg-4 ends -->
           </div>
            <!-- Map Container -->
-        <div class="col-lg-8 ptp-map-section ptp-map-container">
+        <div class="col-lg-8 ptp-map-section ptp-map-container map-disable">
             <div id="ptpmap" class="sidebar-section-body"></div>
         </div>
     </div>
@@ -1138,7 +1142,7 @@
             <label for="" class="label">Obstruction Height (m)</label>
             <input type="text" class="input" id="obstructionMastHt" required>
           </div>
-          <div class="col-2 sidebar-padding ">
+          <div class="col-2 sidebar-padding btn-margin">
             <label></label>
             <input type="submit" value="Add" class="input submitObstruction" onclick="newObstructionData()"/>
           </div>
@@ -1784,7 +1788,7 @@
           </tr>
           <tr>
             <td>0.1</td>
-            <td>N/A</td>
+            <td>50</td>
             <td>N/A</td>
             <td>N/A</td>
             <td>N/A</td>
@@ -1920,7 +1924,7 @@
           </tr>
           <tr>
             <td>0.1</td>
-            <td>N/A</td>
+            <td>50</td>
             <td>N/A</td>
             <td>N/A</td>
             <td>N/A</td>
@@ -2053,7 +2057,7 @@
           </tr>
           <tr>
             <td>0.1</td>
-            <td>N/A</td>
+            <td>50</td>
             <td>N/A</td>
             <td>N/A</td>
             <td>N/A</td>
@@ -2892,12 +2896,19 @@
     <script src="javascript/ptp/newradiovalidation.js"></script>
     <script src="javascript/ptp/userThroughputInterference.js"></script>
     <script src="javascript/ptp/sitedetailcontainer.js"></script>
+    <script src="javascript/ptp/whenradiochanged.js"></script>
     
     <!-- GitHub Link-->
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi6LKXKlcIJV5DHJDPAFB45gYDbYCiM80&libraries=places&callback=ptpMap"></script> -->
 
      <!-- internal api -->
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi6LKXKlcIJV5DHJDPAFB45gYDbYCiM80&libraries=places&callback=ptpMap"></script>
-    <script src="javascript/ptp/placesapi.js"></script>
+     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi6LKXKlcIJV5DHJDPAFB45gYDbYCiM80&libraries=places&callback=ptpMap"></script>
+    <script src="javascript/ptp/placesapi.js"></script> -->
+
+     <!-- internal api -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmCFK8l5e83wNqK_1gll7WEhplgMgvnqc&callback=ptpMap&v=weekly"
+      defer
+    ></script>
   </body>
 </html>

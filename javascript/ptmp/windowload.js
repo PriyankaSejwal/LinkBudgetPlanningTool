@@ -30,6 +30,7 @@ function checkBandwidth() {
       // optarray = [5190, 5785];
       noisefloor = 83;
       refertable = document.querySelector("#throughput80MHz");
+      break;
   }
   // console.log(optarray);
   // createFreq(optarray);
@@ -37,7 +38,6 @@ function checkBandwidth() {
 
 // function to create frequencies
 function createFreq(optarray, size) {
-  console.log(optarray);
   var selectElement = document.getElementById("channelFreq");
   selectElement.innerHTML = "";
   var array = [];
@@ -46,7 +46,6 @@ function createFreq(optarray, size) {
       array.push(j);
     }
   }
-  console.log(array);
   for (opt in array) {
     var newoption = document.createElement("option");
     newoption.innerHTML = array[opt];
@@ -62,19 +61,16 @@ function setMasterLimits() {
   coverageAreaMaster[1] = 360; //   upper left limit
   coverageAreaMaster[2] = 0; // lower right limit
   coverageAreaMaster[3] = 360 - halfBeam; //   lower left limit
-  console.log(coverageAreaMaster);
 }
-// function to set the upper and lower bounds for the Sector around Master in Map
+// function to set the upper and lower bounds for the  creating Sector around Master in Map (visual)
 function setSectorBounds() {
   var masterBeamwidth = parseFloat($("#masterRadio").val().split(",")[1]);
   var masterOrientationAngle = parseFloat($("#masterAngle").val());
   var halfBeam = masterBeamwidth / 2;
   var halfOfHalfBeam = halfBeam / 2;
-  console.log(halfBeam);
   sectorBound[0] = (masterOrientationAngle - halfBeam + 360) % 360; // lower left limit
   sectorBound[1] = masterOrientationAngle; // center Pt
   sectorBound[2] = (halfBeam + masterOrientationAngle + 360) % 360; //   upper right limit
   sectorBound[3] = (masterOrientationAngle - halfOfHalfBeam + 360) % 360; // left To center
   sectorBound[4] = (halfOfHalfBeam + masterOrientationAngle + 360) % 360; // rightTocenter
-  console.log(sectorBound);
 }

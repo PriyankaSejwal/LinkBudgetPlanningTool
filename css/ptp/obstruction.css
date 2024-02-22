@@ -33,7 +33,9 @@
 .submitObstruction {
   text-align: center;
 }
-
+.btn-margin {
+  padding: 7px;
+}
 #obsUL {
   list-style: none;
   padding: 5px;

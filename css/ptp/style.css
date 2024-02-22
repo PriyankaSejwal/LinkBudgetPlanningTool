@@ -140,7 +140,7 @@ input[type="number"]::-webkit-inner-spin-button {
   cursor: text;
 }
 .top-margin {
-  margin-top: 7px;
+  margin-top: 9px;
 }
 strong {
   color: red;

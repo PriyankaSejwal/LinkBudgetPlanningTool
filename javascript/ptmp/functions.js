@@ -58,7 +58,7 @@ function createSlavesCoordinateField() {
       id: `slave${i}Co-ordinate`,
       placeholder: "lat,long",
       name: `slave${i}`,
-      class: "input",
+      class: "input coordInput",
     });
     ddcoordinput = $("<input>", {
       id: `slave${i}DDCoord`,
@@ -85,8 +85,10 @@ function createSlavesCoordinateField() {
       .querySelector(`#slave${i}Co-ordinate`)
       .addEventListener("change", function () {
         if (this.value.includes(",")) {
-          var coordSlave = this.value.split(",");
+          var coordSlave = this.value.split(",").map((item) => item.trim());
           if (coordSlave[1] != "") {
+            // function called which will check whether the coordinate value has already been entered
+            checkForUniqueCoordinateValue(i, coordSlave);
             var [lat, long] = coordSlave;
             console.log(lat, long);
 
@@ -303,6 +305,11 @@ function createSlavesField(i) {
           );
           calculateTx(changedAngle, i);
           calcSNR(i);
+          availability(i);
+          throughputUpdationAfterHeightChange(i);
+          ptmpMasterThroughput();
+          ptmpSlaveThroughput();
+          ULDLThroughput();
         }
       }
     });
@@ -339,6 +346,10 @@ function createSlavesField(i) {
     if ($(`#slave${i}Co-ordinate`).val() != "") {
       slaveHeightChange(i);
       availability(i);
+      throughputUpdationAfterHeightChange(i);
+      ptmpMasterThroughput();
+      ptmpSlaveThroughput();
+      ULDLThroughput();
     }
   });
 
@@ -357,6 +368,10 @@ function createSlavesField(i) {
         calculateTx(changedAngle, i);
         calcSNR(i);
         availability(i);
+        throughputUpdationAfterHeightChange(i);
+        ptmpMasterThroughput();
+        ptmpSlaveThroughput();
+        ULDLThroughput();
       }
     } else {
       var allspan = document.querySelectorAll(`.empty${i}`);
@@ -463,7 +478,6 @@ function createElevationFields(slaveInputSection, i) {
 
   // eventlistener to the edit div
   $(`#slave${i}Obstruction`).click(function () {
-    console.log("hello");
     $(`#slave${i}ObsSection`).css("display", "block");
   });
 }
@@ -710,26 +724,31 @@ function calculateTx(angle, i) {
   console.log(mRadio, masterTx, slaveGain, hopDist, cf);
 
   // upper lower limits of the angle on right and left side
-  var halfBeam = masterBeamwidth / 2;
-  var rightUpperLimit = halfBeam;
-  var rightLowerLimit = halfBeam - 5;
-  var leftLowerLimit = 360 - halfBeam;
-  var leftUpperLimit = leftLowerLimit + 5;
-  console.log(rightLowerLimit, rightUpperLimit, leftLowerLimit, leftUpperLimit);
+  // var halfBeam = masterBeamwidth / 2;
+  // var rightUpperLimit = halfBeam;
+  // var rightLowerLimit = halfBeam - 5;
+  // var leftLowerLimit = 360 - halfBeam;
+  // var leftUpperLimit = leftLowerLimit + 5;
+  // console.log(rightLowerLimit, rightUpperLimit, leftLowerLimit, leftUpperLimit);
 
   // Changing gain based on the angle
-  if (
-    (angle >= leftLowerLimit && angle <= leftUpperLimit) ||
-    (angle >= rightLowerLimit && angle <= rightUpperLimit)
-  ) {
-    mRadio = mRadio * 0.2;
-  }
+  // if (
+  //   (angle >= leftLowerLimit && angle <= leftUpperLimit) ||
+  //   (angle >= rightLowerLimit && angle <= rightUpperLimit)
+  // ) {
+  //   mRadio = mRadio * 0.2;
+  // }
+
+  // New way of capturing Master gain
+  mRadioGain = getGainForSlaveBasedOnAngle(mRadio, angle);
+  console.log(
+    `Master Gain for the slave ${i} is: ${mRadioGain} and angle is ${angle}`
+  );
 
   var eirpVal = [
     slaveTx + mRadio + slaveGain - 4,
     masterTx + mRadio + slaveGain - 4,
   ];
-  console.log(eirpVal[0]);
   // Populating the values of RSL for Master and particular Slave
   var checkRange = document.getElementById(`In Range${i}1`).innerHTML;
   if (checkRange == "Yes") {
@@ -765,7 +784,7 @@ function calcSNR(i) {
         parseFloat(refertable.rows[2].cells.item(0).innerHTML);
 
       // mcs, modulation, etc
-      var rowlength = document.getElementById("throughput20MHz").rows.length;
+      var rowlength = refertable.rows.length;
       for (let t = 1; t < rowlength; t++) {
         var min = refertable.rows[t].cells.item(0).innerHTML;
         var max = refertable.rows[t].cells.item(1).innerHTML;
@@ -801,8 +820,8 @@ function calcSNR(i) {
       if ($(`#slave${i}Radio option:selected`).html().includes("CPE")) {
         console.log("CPE Radio");
         if (throughput > 300) {
-          $(`#Throughput${i}${j}`).html(300);
-          $(`#reportSlave${i}Throughput${j}`).html(300);
+          $(`#Throughput${i}${j}`).html(300 / 2);
+          $(`#reportSlave${i}Throughput${j}`).html(300 / 2);
         }
       }
       throughputArr[j][i - 1] =
@@ -837,13 +856,13 @@ function calcSNR(i) {
 
   // calling function which will calculate the ptmp throughput
   // throughputPTMP();
-  var numOfSlaves = $(`#numberOfSlaves`).val();
-  var lastSlaveThroughput = $(`#Throughput${eval(numOfSlaves)}1`).html();
-  if (lastSlaveThroughput != "") {
-    ptmpMasterThroughput();
-    ptmpSlaveThroughput();
-    ULDLThroughput();
-  }
+  // var numOfSlaves = $(`#numberOfSlaves`).val();
+  // var lastSlaveThroughput = $(`#Throughput${eval(numOfSlaves)}1`).html();
+  // if (lastSlaveThroughput != "") {
+  //   ptmpMasterThroughput();
+  //   ptmpSlaveThroughput();
+  //   ULDLThroughput();
+  // }
 }
 
 function availability(i) {
@@ -904,6 +923,22 @@ function availability(i) {
     document.getElementById(`Link Availability${i}1`).innerHTML = "N/A";
     $(`#reportSlave${i}Availability0`).html("N/A");
     $(`#reportSlave${i}Availability1`).html("N/A");
+  }
+}
+
+// function to check the link availability and based on that changing the throughput array
+function checkAvailability() {
+  // j is for the Master and Slave
+  // i is for the number of slaves
+  var numOfSlave = parseInt($("#numberOfSlaves").val());
+  for (let i = 1; i <= numOfSlave; i++) {
+    var inRange = document.getElementById(`In Range${i}1`).innerHTML;
+    var los = $(`#LOS${i}1`).html();
+    if (inRange == "No" || los == "No") {
+      for (let j = 0; j <= 1; j++) {
+        throughputArr[j][i - 1] = 0;
+      }
+    }
   }
 }
 

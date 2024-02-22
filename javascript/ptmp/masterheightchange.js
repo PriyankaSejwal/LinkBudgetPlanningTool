@@ -11,6 +11,13 @@ $("#masterHeight").change(function () {
       updatechartafterMasterhtchange(k);
     }
     availability(k);
+    /*after height change for slave where los was not clear initially, we had throughput as N/A, 
+  as los now will get clear after heigth change we need to get the throughput value to do the 
+  calculations again */
+    throughputUpdationAfterHeightChange(k);
+    ptmpMasterThroughput();
+    ptmpSlaveThroughput();
+    ULDLThroughput();
   }
 });
 
@@ -18,7 +25,6 @@ $("#masterHeight").change(function () {
 function updatechartafterMasterhtchange(k) {
   if ($(`#slave${k}Co-ordinate`).val() != "") {
     var elevationData = allElevation[k][0];
-    console.log(elevationData);
     var dist = parseFloat($(`#Distance${k}1`).html());
     var rad = parseFloat(
       document.getElementById(`Fresnel Radius${k}1`).innerHTML
@@ -94,9 +100,7 @@ function updatechartafterMasterhtchange(k) {
         $(`#reportSlave${k}LOS0`).html("Yes");
         $(`#reportSlave${k}LOS1`).html("Yes");
         $(`#LOS${k}1`).css({ color: "green" });
-        console.log(
-          `at ${i} the ellipse is ${ellipsearray2[i][1]} and elevation is ${elevationData[i]}`
-        );
+
         // polyLine[k].setOptions({ strokeColor: "Green" });
         // reportPolyline[k].setOptions({ strokeColor: "Green" });
       } else {
@@ -104,9 +108,7 @@ function updatechartafterMasterhtchange(k) {
         $(`#LOS${k}1`).css({ color: "red" });
         $(`#reportSlave${k}LOS0`).html("No");
         $(`#reportSlave${k}LOS1`).html("No");
-        console.log(
-          `at ${i} the ellipse is ${ellipsearray2[i][1]} and elevation is ${elevationData[i]}`
-        );
+
         // polyLine[k].setOptions({ strokeColor: "Red" });
         // reportPolyline[k].setOptions({ strokeColor: "Red" });
         break;

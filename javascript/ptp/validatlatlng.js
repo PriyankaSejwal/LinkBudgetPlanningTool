@@ -4,8 +4,12 @@ var address;
 // event listener on the coordinate fields
 for (let i = 1; i <= 2; i++) {
   $(`#searchtower${i}`).change(function () {
-    $(`#add${i}`).val("");
-    dmsddCheck(i);
+    if ($(`#searchtower1`).val() != $(`#searchtower2`).val()) {
+      $(`#add${i}`).val("");
+      dmsddCheck(i);
+    } else {
+      window.print("The site details must be different to proceed.");
+    }
   });
 }
 

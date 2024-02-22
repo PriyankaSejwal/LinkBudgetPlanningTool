@@ -20,6 +20,11 @@
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
       crossorigin="anonymous"
     ></script>
+     <!-- sheet js library -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"
+    ></script>
 
     <!-- Google Fonts Link -->
     <link
@@ -66,33 +71,7 @@
     <!-- NavBar Begins -->
     <div class="wrapper">
       <div class="header print-hide">
-        <!-- Top Header for Search Result -->
-        <!-- <div class="top-head">
-          <div class="container-fluid">
-            <div class="topheadflex">
-              <a href="https://io.hfcl.com/contact-us" class="active"
-                >Contact Us</a
-              >
-              <a href="#" class="searchLink" id="search-Click">
-                <i class="fa fa-search" aria-hidden="true"></i>
-              </a>
-            </div>
-          </div>
-          <div class="search-bar" id="search">
-            <form
-              action="https://io.hfcl.com/search"
-              method="get"
-              class="search"
-            >
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search" />
-              </div>
-              <div class="close-search" id="closeSearch">
-                <i class="fa fa-times" aria-hidden="true"></i>
-              </div>
-            </form>
-          </div>
-        </div> -->
+        
         <!-- Bottom Header -->
         <div class="bottom-head">
           <div class="container-fluid">
@@ -101,7 +80,7 @@
               <div class="logo">
                 <a href="https://io.hfcl.com">
                   <img
-                    src="images/logo_new.svg"
+                    src="images/logo.svg"
                     alt="io-logo"
                   />
                 </a>
@@ -112,18 +91,18 @@
                 <div class="menuoutbox">
                   <div class="moblogobox">
                     <a href="https://io.hfcl.com">
-                      <img src="/images/IO-logo-new.png" alt="io-logo" />
+                      <img src="/images/logo.svg" alt="io-logo" />
                     </a>
                   </div>
                   <ul class="mobileulfix">
                     <li class="menuhover">
-                      <span>Link Planning Tool</span>
+                      <span>LinkXPert</span>
                     </li>
                   </ul>
                 </div>
                 <!-- Demo Button -->
                 <a href="https://io.hfcl.com/contact-us" class="getdemobtn"
-                  >Get a Demo</a
+                  >Book a Demo</a
                 >
                 <!-- Toggle Menu Hamburger Sign -->
                 <div class="togglemenus">
@@ -156,15 +135,18 @@
             <div class="sidebar-section-body">
               <div class="d-flex justify-content-between">
                 <!-- Button to cancel the selected country and reset button -->
-                <div class="col-8" >
+                <div class="col-sm-8 col-lg-9 p-0" >
+                  <div class="btn-group" role="group" aria-label="Cancel and Reset Buttons">
                   <button type="button" class="linkbtn btn" id="cancelp2mp">
                     <a href="index.html">Go Back</a> </button>
                   </button>
-                  <button type="button" class="btn disabled-class" id="resetptmpLink" onclick="resetptmp()">Reset</button>
-                </div>    
+                  <button type="button" class="btn disabled-class" id="resetptmpLink">Reset</button>
+                  </div>
+                </div>
+                  
                 <!-- Choose the country -->
-                <div class="col-3 text-right">
-                  <select name="" id="ctryCode" onchange="ctryChangePTMP()">
+                <div class="col-lg-3 col-sm-4 p-0 text-right">
+                  <select name="" id="ctryCode">
                     <option value="" selected disabled>Country</option>
                     <option value="af">Afghanistan</option>
                     <option value="ax">Alan Islands</option>
@@ -366,9 +348,10 @@
                     <option value="nd">No Country</option>
                   </select>
                 </div>
+                </div>  
               </div>
             </div>
-          </div>
+          
           <!-- First column ends where we can Go Back, reset and select a country -->
 
           <!-- sidebar body for the ptmp page -->
@@ -384,8 +367,7 @@
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
                       title="Number of slaves to connect">Slaves</label>
-                      <select name="" id="numberOfSlaves" 
-                      onchange="createSlavesCoordinateField(); createMasterTable();">
+                      <select name="" id="numberOfSlaves" >
                       <option value=" " disabled selected>Slaves</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -409,7 +391,6 @@
                         name=""
                         id="channelBW"
                         class="select"
-                        onchange="checkBandwidth(); frequencydata();eirpcalculate();bandwidthChange()"
                       >
                         <option value="" hidden>Bandwidth</option>
                         <option value="10" id="10mhz">10 MHz</option>
@@ -426,7 +407,6 @@
                       <select
                         id="channelFreq"
                         class="select"
-                        onchange="eirpcalculate();bandwidthChange()"
                       ></select>
                       <!-- </div> -->
                     </div>
@@ -444,8 +424,7 @@
                       class="input"
                       placeholder="lat,long"
                       name="Master"
-                      id="masterCo-ordinate"
-                      onchange="placeMasterOnMap()">
+                      id="masterCo-ordinate">
                       </div>
                       <!-- Master Angle -->
                       <div class="col-4 sidebar-padding">
@@ -454,8 +433,7 @@
                         data-bs-placement="top"
                         title="Angle where Master is facing horizontally from true North in °">Master Angle</label>
                         <input type="number" class="input" id="masterAngle"
-                        value="0"
-                        onchange="checkAngle()">
+                        value="0">
                         <span class="unit">°</span>
                       </div>
                       <!-- EIRP field -->
@@ -500,7 +478,6 @@
                         class="btn"
                         id="addSlaveButton"
                         disabled
-                        onclick="checkCurrentSlaveCount()"
                       >
                         Add another slave
                       </button>
@@ -517,7 +494,6 @@
                         name=""
                         id="masterRadio"
                         class="select"
-                        onchange="masterTx();masterRadioChanged()"
                         >
                           <option value="17,90">ion4l1_BTS</option>
                           <option value="19,60">ion4l2_BTS</option>
@@ -551,7 +527,6 @@
                         min="3"
                         max="27"
                         value="27"
-                        onchange="masterTxChange()"
                         />
                         <span class="unit">dBm</span>
                       </div>
@@ -620,13 +595,15 @@
             </form>
           </div>
         </div>
+      
         <!-- Map Container -->
         <div class="col-lg-7 map-section map-container">
           <div id="map3d" class="sidebar-section-body"></div>
         </div>
-
       </div>
+
     </div>
+    
     <!-- Main Body Ends -->
 
     <div class="table" style="display: none">
@@ -1339,6 +1316,8 @@
     <script src="javascript/ptmp/additionalslave.js"></script>
     <script src="javascript/ptmp/createobstructiontable.js"></script>
     <script src="javascript/ptmp/elevationwithobstruction.js"></script>
+    <script src="javascript/ptmp/antennaGainObject.js"></script>
+    <script src="javascript/ptmp/eventlistener.js"></script>
     <!-- <script src="https://maps.googleapis.com/maps/api/js?sensor=false&callback=initMap"></script> -->
     <!-- GitHub api-->
     <!-- <script
@@ -1346,9 +1325,14 @@
     defer
   ></script> -->
  <!-- internal api -->
- <script
+  <!-- internal api -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmCFK8l5e83wNqK_1gll7WEhplgMgvnqc&callback=initMap&v=weekly"
+      defer
+    ></script>
+ <!-- <script
  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi6LKXKlcIJV5DHJDPAFB45gYDbYCiM80&callback=initMap&v=weekly"
  defer
-></script>
+></script> -->
   </body>
 </html>

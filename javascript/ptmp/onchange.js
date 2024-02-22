@@ -86,6 +86,14 @@ function checkMasterRange() {
         //  calling function to calculate SNR etc
         calcSNR(i);
         availability(i);
+        var lastSlaveThroughput = $(`#Throughput${eval(numOfSlaves)}1`).html();
+        if (lastSlaveThroughput != "") {
+          // newly added functions 08-02-2024
+          throughputUpdationAfterHeightChange(i);
+          ptmpMasterThroughput();
+          ptmpSlaveThroughput();
+          ULDLThroughput();
+        }
       }
     }
   }
@@ -151,6 +159,16 @@ function masterTxChange() {
           calculateTx(changedAngle, i);
           calcSNR(i);
           availability(i);
+          var lastSlaveThroughput = $(
+            `#Throughput${eval(numOfSlaves)}1`
+          ).html();
+          if (lastSlaveThroughput != "") {
+            // newly added functions 08-02-2024
+            throughputUpdationAfterHeightChange(i);
+            ptmpMasterThroughput();
+            ptmpSlaveThroughput();
+            ULDLThroughput();
+          }
         } else {
           continue;
         }
@@ -191,14 +209,17 @@ function bandwidthChange() {
 
         calcSNR(i);
         availability(i);
+        var lastSlaveThroughput = $(`#Throughput${eval(numOfSlaves)}1`).html();
+        if (lastSlaveThroughput != "") {
+          // newly added functions 08-02-2024
+          throughputUpdationAfterHeightChange(i);
+          ptmpMasterThroughput();
+          ptmpSlaveThroughput();
+          ULDLThroughput();
+        }
       } else {
         continue;
       }
     }
   }
 }
-
-// function called when channel frequency is changed
-function frequencyChanged() {}
-
-// GENERAL FUNCTION

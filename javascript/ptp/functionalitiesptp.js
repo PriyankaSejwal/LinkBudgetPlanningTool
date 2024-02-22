@@ -13,47 +13,52 @@ $("#latLongBtn").click(function () {
   }
 });
 
-for (let i = 1; i <= 2; i++) {
-  $(`#radio${i}`).change(function () {
-    // value of EIRP
-    var eirp = parseInt($("#ptpeirpMax").val());
-    // gain value for the selected radio
-    var r = parseInt($(`#radio${i}`).val().split(",")[0]);
-    // populating the va;ue of the antenna gain in the gain field
-    $(`#antgain${i}`).val(r);
-    var gain = $(`#antgain${i}`);
-    var cableloss = $(`#cableLoss${i}`);
-    var optionGroup = $(`#radio${i} option:selected`).parent().prop("label");
-    var gainalert = $(`.gain${i}Alert`);
-    var empty = document.querySelectorAll(`.empty`);
-    if (optionGroup == "External Antenna") {
-      extRadio(gain, cableloss, gainalert, empty);
-    } else {
-      otherRadio(gain, cableloss, gainalert);
-      calcTxPower();
-    }
-    if (r < eirp) {
-      $(`.gainEirpAlert${i}`).fadeOut();
-      // extracting the name/type and family of the radio
-      var radioType1 = $("#radio1 option:selected").attr("class");
-      var radioType2 = $("#radio2 option:selected").attr("class");
+// report button
+$("#ptpreportbtn").click(function () {
+  reportMarker();
+});
 
-      if (radioType1 == radioType2) {
-        // function called to refer the mcs table
-        checkRadios();
-        // alert about same family
-        $(`.radioAlert`).hide();
-      } else {
-        $(`.radioAlert`).show();
-      }
-    } else {
-      console.log(
-        "EIRP is smaller than the gain for the selected radio we can not proceed further"
-      );
-      $(`.gainEirpAlert${i}`).fadeIn();
-    }
-  });
-}
+// for (let i = 1; i <= 2; i++) {
+//   $(`#radio${i}`).change(function () {
+//     // value of EIRP
+//     var eirp = parseInt($("#ptpeirpMax").val());
+//     // gain value for the selected radio
+//     var r = parseInt($(`#radio${i}`).val().split(",")[0]);
+//     // populating the va;ue of the antenna gain in the gain field
+//     $(`#antgain${i}`).val(r);
+//     var gain = $(`#antgain${i}`);
+//     var cableloss = $(`#cableLoss${i}`);
+//     var optionGroup = $(`#radio${i} option:selected`).parent().prop("label");
+//     var gainalert = $(`.gain${i}Alert`);
+//     var empty = document.querySelectorAll(`.empty`);
+//     if (optionGroup == "External Antenna") {
+//       extRadio(gain, cableloss, gainalert, empty);
+//     } else {
+//       otherRadio(gain, cableloss, gainalert);
+//       calcTxPower();
+//     }
+//     if (r < eirp) {
+//       $(`.gainEirpAlert${i}`).fadeOut();
+//       // extracting the name/type and family of the radio
+//       var radioType1 = $("#radio1 option:selected").attr("class");
+//       var radioType2 = $("#radio2 option:selected").attr("class");
+
+//       if (radioType1 == radioType2) {
+//         // function called to refer the mcs table
+//         checkRadios();
+//         // alert about same family
+//         $(`.radioAlert`).hide();
+//       } else {
+//         $(`.radioAlert`).show();
+//       }
+//     } else {
+//       console.log(
+//         "EIRP is smaller than the gain for the selected radio we can not proceed further"
+//       );
+//       $(`.gainEirpAlert${i}`).fadeIn();
+//     }
+//   });
+// }
 
 function extRadio(gain, loss, gainAlert, empty) {
   gain.val("");
@@ -139,6 +144,11 @@ function hopazimuth() {
   document.getElementById("reportHeadingB").innerHTML = angleb + "°";
 
   // fresneleirp();
+}
+
+function checkReferringTable(radioFamily) {
+  tablecontainer = radioFamily + "-table";
+  checkBandwidth();
 }
 
 // function whihc will check the bandwidth and will give value of noise floor and table for UBAX and normal table
@@ -230,50 +240,57 @@ function calcTxPower() {
       antgain = parseFloat(antgain);
       var cableloss = parseInt($(`#cableLoss${i}`).val());
       // comparing the allowed tx as per the radi with the maxtx based on the country and the bandwidth
-      var maxtx = Math.min(txlimitctrybased, mcsbasedtxpower, allowedTx);
-      console.log(
-        "The information about max tx as per ctry, as per the mcs, as per the radio model, and the minimum of all the two",
-        txlimitctrybased,
-        mcsbasedtxpower,
-        allowedTx,
-        maxtx
-      );
 
       // Calculated tx power for A B sites
-      var tx = eirp - antgain + cableloss;
+      var txcalculated = eirp - antgain + cableloss;
 
-      if (tx < 3) {
+      if (txcalculated < 3) {
         $(`.tx${i}Alert`).show();
       } else {
         $(`.tx${i}Alert`).hide();
+        var maxtx = Math.min(
+          txlimitctrybased,
+          mcsbasedtxpower,
+          allowedTx,
+          txcalculated
+        );
         // tx power for calculation
-
-        tx = tx > maxtx ? maxtx : tx;
-        $(`#transmitPower${i}`).val(tx);
+        $(`#transmitPower${i}`).val(maxtx);
         // setting the max attribute as the max tx calculated
-        $(`#transmitPower${i}`).prop("max", tx);
-        maxTxArray[i] = tx;
+        $(`#transmitPower${i}`).prop("max", maxtx);
+        maxTxArray[i] = maxtx;
       }
     }
-    deviceinfo();
   } else {
     window.alert("The subscirber bandwidth is required to go ahead.");
   }
 }
 
 function updateTransmitPower(index) {
-  var eirp = parseFloat($("#ptpeirpMax").val());
-  var antennaGain = parseFloat($(`#gain${index}`).val());
-  var cableLoss = parseFloat($(`#cableLoss${index}`).val());
-  var transmitPower = parseFloat($(`#transmitPower${index}`).val());
-
-  var txcalculated = eirp - antennaGain + cableLoss;
-  if (txcalculated < maxTxArrayrray[index - 1]) {
-    if (txcalculated < transmitPower) {
-      $(`#transmitPower${index}`).val(txcalculated);
-    }
-    $(`#transmitPower${index}`.prop("max", txcalculated));
-    maxTxArray[index - 1] = txcalculated;
+  // mcs based tx power
+  if (matchedRow) {
+    var mcsbasedtxpower = parseInt(
+      referencetable1.rows[matchedRow].cells.item(7).innerHTML
+    );
+    var eirp = parseFloat($("#ptpeirpMax").val());
+    var antennaGain = parseFloat($(`#antgain${index}`).val());
+    var radiobasedmaxtx = parseFloat($(`#radio${index}`).val().split(",")[1]);
+    var cableLoss = parseFloat($(`#cableLoss${index}`).val());
+    // var transmitPower = parseFloat($(`#transmitPower${index}`).val());
+    var txcalculated = eirp - antennaGain + cableLoss;
+    var maxTxAllowed = Math.min(
+      txlimitctrybased,
+      mcsbasedtxpower,
+      txcalculated,
+      radiobasedmaxtx
+    );
+    $(`#transmitPower${index}`).val(maxTxAllowed);
+    $(`#transmitPower${index}`).prop("max", maxTxAllowed);
+    maxTxArray[index] = maxTxAllowed;
+  } else {
+    window.alert(
+      "Transmit power cannot be updated as planned capacity field is empty."
+    );
   }
 }
 
@@ -284,7 +301,8 @@ for (let i = 1; i <= 2; i++) {
     .querySelector(`#transmitPower${i}`)
     .addEventListener("change", function () {
       var txpower = this.value;
-      if (txpower < 3 || txpower > maxTxArray[i]) {
+      var maxTx = Number($(`#transmitPower${i}`).attr("max"));
+      if (txpower < 3 || txpower > maxTx) {
         document.querySelector(`.tx${i}Alert2`).style.display = "block";
         empty = document.querySelectorAll(".empty");
         for (let i = 0; i < empty.length; i++) {
@@ -292,6 +310,7 @@ for (let i = 1; i <= 2; i++) {
         }
       } else {
         document.querySelector(`.tx${i}Alert2`).style.display = "none";
+        $(`#reporttx${i}`).html(txpower);
         deviceinfo();
       }
     });
@@ -309,7 +328,8 @@ for (let i = 1; i <= 2; i++) {
       }
     } else {
       $(`.cable${i}Alert`).hide();
-      calcTxPower();
+      updateTransmitPower(i);
+      deviceinfo();
     }
   });
 }
@@ -325,22 +345,22 @@ function deviceinfo() {
   // calling function checkBandwidth
   // checkBandwidth();
   var dist = parseFloat(document.getElementById("linkDistance").innerHTML);
-  if (document.getElementById("linkDistance").innerHTML != "") {
+  if (dist != "") {
     var f = document.getElementById("ptpchannelFrequency");
     var freq = parseFloat(f.options[f.selectedIndex].innerHTML);
     var loss1 = parseInt(document.getElementById("cableLoss1").value);
     var loss2 = parseInt(document.getElementById("cableLoss2").value);
-    var gain1 = parseInt(document.getElementById("radio1").value.split(",")[0]);
-    var gain2 = parseInt(document.getElementById("radio2").value.split(",")[0]);
+    var gain1 = parseInt(document.getElementById("antgain1").value);
+    var gain2 = parseInt(document.getElementById("antgain2").value);
     var tx1 = parseInt($("#transmitPower1").val());
     var tx2 = parseInt($("#transmitPower2").val());
     // the interference if added by the user then noise floor becomes equal to the interference
     var interference = $("#interference-val").val();
-    var snrMatched;
-    var rslMatched;
+    var snrMatched, rslMatched;
 
     // data from the reference table with the matched row for the throughput
     var refertable = referencetable1;
+    // data from the refering table for the product family
     var sensitivity = parseFloat(
       refertable.rows[matchedRow].cells.item(0).innerHTML
     );
@@ -360,162 +380,131 @@ function deviceinfo() {
       mcs,
       "with throughput",
       throughput,
+      "snr minimum",
+      minSNR,
       "interference entered or noise floor considered is :",
       noisefloor
     );
+    var fsl = (
+      20 * Math.log10(dist) +
+      20 * Math.log10(freq / 1000) +
+      92.45
+    ).toFixed(2);
 
-    var eirpval = [
-      gain1 + gain2 + tx2 - loss1 - loss2 - bandwidthLoss,
-      gain1 + gain2 + tx1 - loss1 - loss2 - bandwidthLoss,
+    var rslArray = [
+      gain1 + gain2 + tx2 - loss1 - loss2 - bandwidthLoss - fsl,
+      gain1 + gain2 + tx1 - loss1 - loss2 - bandwidthLoss - fsl,
     ];
-    for (let i = 1; i <= 2; i++) {
-      var rsl = (
-        eirpval[i - 1] -
-        (20 * Math.log10(dist) + 20 * Math.log10(freq / 1000) + 92.45)
-      ).toFixed(2);
-
-      // SNR
-      var snrcalculated = (parseFloat(rsl) + parseFloat(noisefloor)).toFixed(2);
-      // CINR if interferecne is given
-      if (interference) {
-        $(".cinr-hidden").css("display", "table-row");
-        var cinrcalculated = (
-          parseFloat(rsl) + parseFloat(interference)
-        ).toFixed(2);
-        $(`#cinr${i}`).html(cinrcalculated);
-        $(`#reportcinr${i}`).html(cinrcalculated);
-      } else {
-        $(".cinr-hidden").css("display", "none");
-        $(`#cinr${i}`).html("");
-        $(`#reportcinr${i}`).html("");
-      }
-      // Fade Margin
-      var fademargin = (parseFloat(rsl) - parseFloat(sensitivity)).toFixed(2);
-      var radioName = $(`#radio${i} option:selected`).html();
-      // Populating the link setting values
-      $(`#reportRadio${i}`).html(radioName);
-      $(`#reportloss${i}`).html(eval("loss" + i));
-      $(`#reporttx${i}`).html(txpower);
-      $(`#reportAntGain${i}`).html(eval("gain" + i));
-      // Populating all the calculated value now in the fields
-      // RSL
-      document.getElementById(`rsl${i}`).innerHTML = rsl;
-      document.getElementById(`reportrsl${i}`).innerHTML = rsl;
-      // SNR
-      $(`#snr${i}`).html(snrcalculated);
-      $(`#reportsnr${i}`).html(snrcalculated);
-      // Fade Margin
-      $(`#fadeMargin${i}`).html(fademargin);
-
-      // console.log("after the values of mcs");
-      console.log(
-        "snr calculated is:",
-        snrcalculated,
-        "and min snr value is :",
-        minSNR
-      );
-      if (rsl >= sensitivity) {
-        console.log(
-          `In loop ${i} Rsl calculated is ${rsl} and sensitivity is ${sensitivity}`
-        );
-        rslMatched = true;
-      } else {
-        rslMatched = false;
-      }
-      if (snrcalculated >= minSNR) {
-        console.log(
-          `In loop ${i} SNR calculated is ${snrcalculated} and min snr is ${minSNR}`
-        );
-        snrMatched = true;
-      } else {
-        snrMatched = false;
-      }
+    var snrArray = [rslArray[0] + noisefloor, rslArray[1] + noisefloor];
+    console.log(`The RSL values are ${rslArray} SNR values are ${snrArray}`);
+    if (
+      rslArray[0] >= sensitivity &&
+      rslArray[1] >= sensitivity &&
+      snrArray[0] >= minSNR &&
+      snrArray[1] >= minSNR
+    ) {
+      rslMatched = true;
+    } else {
+      rslMatched = false;
+    }
+    // check for interference
+    var cinrArray;
+    if (interference) {
+      interference = parseInt(interference);
+      $(".cinr-hidden").css("display", "table-row");
+      cinrArray = [rslArray[0] + interference, rslArray[1] + interference];
+    } else {
+      $(".cinr-hidden").css("display", "none");
     }
 
-    console.log("Both rsl snr match/no match", rslMatched, snrMatched);
-
+    console.log("rsl snr values matched? ", rslMatched);
+    var rslIndexMatched, snrIndexMatched;
     if (rslMatched) {
-      console.log(
-        `RSL value matched for Site${i} with calculated rsl and sensitivity as:`,
-        rsl,
-        sensitivity
-      );
-      if (snrMatched) {
-        console.log(
-          `SNR matched for Site${i} with calculated snr and min snr as: `,
-          snrcalculated,
-          minSNR
-        );
-        for (let i = 1; i <= 2; i++) {
-          // MCS
-          $(`#mcs${i}`).html(mcs);
-          // Modulation
-          $(`#modulation${i}`).html(modulation);
-          // FEC
-          $(`#fec${i}`).html("'" + fec + "'");
-          // Link Rate
-          $(`#linkRate${i}`).html(linkrate);
-          // Throughput
-          $(`#throughput${i}`).html(throughput / 2);
-          $(`#reportthroughput${i}`).html(throughput / 2);
+      for (let i = 1; i <= 2; i++) {
+        // Fade Margin
+        var fademargin = (rslArray[i - 1] - parseFloat(sensitivity)).toFixed(2);
+        var radioName = $(`#radio${i} option:selected`).html();
+        // Populating the link setting values
+        $(`#reportRadio${i}`).html(radioName);
+        $(`#reportloss${i}`).html(eval("loss" + i));
+        $(`#reporttx${i}`).html(txpower);
+        $(`#reportAntGain${i}`).html(eval("gain" + i));
+        // Populating all the calculated value now in the fields
+        // RSL
+        document.getElementById(`rsl${i}`).innerHTML =
+          rslArray[i - 1].toFixed(2);
+        document.getElementById(`reportrsl${i}`).innerHTML =
+          rslArray[i - 1].toFixed(2);
+        // SNR
+        $(`#snr${i}`).html(snrArray[i - 1].toFixed(2));
+        $(`#reportsnr${i}`).html(snrArray[i - 1].toFixed(2));
+        // CINR
+        $(`#cinr${i}`).html(cinrArray);
+        $(`#reportcinr${i}`).html(cinrArray);
+        // Fade Margin
+        $(`#fadeMargin${i}`).html(fademargin);
+        // MCS
+        $(`#mcs${i}`).html(mcs);
+        // Modulation
+        $(`#modulation${i}`).html(modulation);
+        // FEC
+        $(`#fec${i}`).html("'" + fec);
+        // Link Rate
+        $(`#linkRate${i}`).html(linkrate);
+        // Throughput
+        $(`#throughput${i}`).html(throughput / 2);
+        $(`#reportthroughput${i}`).html(throughput / 2);
 
-          if (radioName.includes("CPE") && throughput > 300) {
-            $(`#throughput${i}`).html(150);
-            $(`#reportthroughput${i}`).html(150);
-            //   }
-          }
-        }
-        // function which will tell the max MCS achievable
-        maximumAchievableThroughput();
-        availability();
-      } else {
-        //when calculated snr is not smaller than minSNR, snr is not matched with the criteria
-        var tablelength = refertable.rows.length;
-        var snrcalculated = $(`#snr1`).html();
-        for (let t = 1; t < tablelength; t++) {
-          var minSNR = parseInt(refertable.rows[t].cells.item(1).innerHTML);
-
-          if (minSNR > snrcalculated) {
-            console.log(
-              "Minimum snr as per mcs is:",
-              minSNR,
-              "& the calculated snr is: ",
-              snrcalculated
-            );
-            var throughput = refertable.rows[t - 1].cells.item(6).innerHTML;
-            window.alert(
-              ` With given user inputs (SNR ${snrcalculated}dB), we can achieve maximum throughput of ${throughput}Mbps.`
-            );
-            // removing the calculations from the link summary table
-            empty = document.querySelectorAll(".empty");
-            for (let j = 0; j < empty.length; j++) {
-              empty[j].innerHTML = "";
-            }
-            $("#maxThroughputMcs").html("");
-            break;
-          }
+        if (radioName.includes("CPE") && throughput > 300) {
+          $(`#throughput${i}`).html(150);
+          $(`#reportthroughput${i}`).html(150);
+          //   }
         }
       }
+      availability();
+      // function which will tell the max MCS achievable
+      maximumAchievableThroughput();
     } else {
-      // when calculated rsl is not smaller than sensitivity, rsl is not matched with the min snr criteria
+      //when calculated snr is not smaller than minSNR, snr is not matched with the criteria
       var tablelength = refertable.rows.length;
-      var rsl = $("#rsl1").html();
+      var minrslcalculated = Math.min(...rslArray);
+      var minsnrcalculated = Math.min(...snrArray);
+      console.log(
+        `When no match found, then min snr calculated is ${minsnrcalculated} and min snr required is ${minSNR},  min rsl calculated is ${minrslcalculated} and sensitivity is ${sensitivity}`
+      );
+      // finding out the mcs match based on rsl
       for (let t = 1; t < tablelength; t++) {
         var sensitivity = parseInt(refertable.rows[t].cells.item(0).innerHTML);
-        if (sensitivity > rsl) {
-          console.log("Sensitivity:", sensitivity, "& RSL", rsl);
-          var throughput = refertable.rows[t - 1].cells.item(6).innerHTML;
-          window.alert(
-            `Based on the given inputs (RSL ${rsl}dBm), we can achieve maximum throughput of ${throughput}Mbps.`
-          );
-          // empty = document.querySelectorAll(".empty");
-          for (let j = 0; j < empty.length; j++) {
-            empty[j].innerHTML = "";
-          }
-          $("#maxThroughputMcs").html("");
+        if (minrslcalculated < sensitivity) {
+          rslIndexMatched = true;
+          rslIndex = t - 1;
           break;
         }
       }
+      // finding out mcs match based on snr
+      for (let t = 1; t < tablelength; t++) {
+        var minSNR = parseInt(refertable.rows[t].cells.item(1).innerHTML);
+        if (minsnrcalculated < minSNR) {
+          snrIndexMatched = true;
+          snrIndex = t - 1;
+          break;
+        }
+      }
+      // going forward with the smallest index of the two
+      if (snrIndexMatched && rslIndexMatched) {
+        var minIndex = Math.min(rslIndex, snrIndex);
+        var throughput = refertable.rows[minIndex].cells.item(6).innerHTML;
+        window.alert(
+          ` With given user inputs (SNR ${minsnrcalculated}dB, rsl ${minrslcalculated}), we can achieve maximum throughput of ${throughput}Mbps.`
+        );
+        // removing the calculations from the link summary table
+        empty = document.querySelectorAll(".empty");
+        for (let j = 0; j < empty.length; j++) {
+          empty[j].innerHTML = "";
+        }
+      }
+      // empty the field where we were giving message about the max achievabele throughput
+      $("#maxThroughputMcs").html("");
     }
   }
 }

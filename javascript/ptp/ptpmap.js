@@ -36,10 +36,11 @@ function ptpMap() {
     var subscriberBandwidth = $("#subscribedBandwidth").val();
     if (subscriberBandwidth) {
       $(".emptySubscriberBwAlert").fadeOut();
-      if (ptpmarkersarr.length < 2) {
-        addMarker(e.latLng);
+      var numOfMarkers = ptpmarkersarr.length;
+      if (numOfMarkers < 2) {
+        addMarker(e.latLng, numOfMarkers + 1);
 
-        if (ptpmarkersarr.length == 2) {
+        if (numOfMarkers == 1) {
           addMarkerToReport();
           addAddress();
         }
@@ -57,13 +58,14 @@ function ptpMap() {
 }
 
 // Adding Markers on the map by clicking on the map
-function addMarker(latLng) {
+function addMarker(latLng, n) {
   document.getElementById("add1").value = "";
   document.getElementById("add2").value = "";
   ptpmarker = new google.maps.Marker({
     map: ptpmap,
     position: latLng,
     draggable: true,
+    icon: `images/Site${n}.png`,
     // icon can be added
   });
   // add listener to redraw the polyline when markers position change
@@ -74,7 +76,10 @@ function addMarker(latLng) {
   });
   //extend the bounds to include each marker's position
   ptpmarkersarr.push(ptpmarker);
+  ptpbounds.extend(ptpmarker.getPosition());
   // reportMarkerArr.push(ptpmarker);
+  ptpmap.fitBounds(ptpbounds);
+  ptpmap.setZoom(12);
 }
 
 // Adding Markers to the report map
@@ -109,8 +114,8 @@ function reportMarker() {
   ptpreportmap.fitBounds(ptpreportbounds);
 
   // populating the inner html of elevation chart to the report elevation chart
-  document.querySelector("#report_elevation_profile").innerHTML =
-    document.querySelector("#ptpchart").innerHTML;
+  // document.querySelector("#report_elevation_profile").innerHTML =
+  //   document.querySelector("#ptpchart").innerHTML;
 
   // Populating values in the Site A and Site B tables
   var nameA = document.getElementById("siteAName").value;
@@ -135,18 +140,21 @@ function reportMarker() {
   document.getElementById("reportCoordB").innerHTML = coordb;
   document.getElementById("reportHeightA").innerHTML = hta + " m";
   document.getElementById("reportHeightB").innerHTML = htb + " m";
+
+  // know the current map view type
+  ptpreportmap.setMapTypeId(ptpmap.getMapTypeId());
   /* In installation report we have columns where we popoulate the address of the sites
   there happens a situation somtimes that either of the  two address fields occupy more height 
-  than the other due to lengthy address, which eventually makes difference in the heigth of the two fileds for address
-  to make them of the same heigth we check thebheights of both and whchever has a greater height we make the other
-   field occupy the same height*/
-  var htAddA = document.getElementById("reportAddressA").offsetHeight;
-  var htAddB = document.getElementById("reportAddressB").offsetHeight;
+  than the other due to lengthy address, which eventually makes difference in the heigth of the
+   two fileds for address to make them of the same heigth we check thebheights of both and whichever
+    has a greater height we make the other field occupy the same height*/
+  var htAddA = document.getElementById("addHeightA").offsetHeight;
+  var htAddB = document.getElementById("addHeightB").offsetHeight;
   if (htAddA > htAddB) {
-    var ht = (htAddA + 13.8).toString() + "px";
+    var ht = htAddA.toString() + "px";
     document.getElementById("addHeightB").style.height = ht;
   } else {
-    var ht = (htAddB + 13.8).toString() + "px";
+    var ht = htAddB.toString() + "px";
     document.getElementById("addHeightA").style.height = ht;
   }
 }
@@ -164,8 +172,8 @@ function inputMarker() {
   // markersarr = [];
   latlongarr = [];
   var site1 = document.getElementById("decimal1").value;
-  var siteb = document.getElementById("decimal2").value;
-  if (site1 != "" && siteb != "") {
+  var site2 = document.getElementById("decimal2").value;
+  if (site1 != "" && site2 != "") {
     var arr = document.getElementsByClassName("towerinput");
     if (arr.length == 2) {
       Array.from(arr).forEach(function (e) {
@@ -178,6 +186,7 @@ function inputMarker() {
         ptpmarker = new google.maps.Marker({
           map: ptpmap,
           position: new google.maps.LatLng(latlongarr[i][0], latlongarr[i][1]),
+          icon: `images/Site${i + 1}.png`,
           draggable: true,
         });
         ptpmap.setZoom(12);
@@ -462,6 +471,24 @@ function elevationchartptp() {
     series: { 0: { type: "area" } },
     curveType: "function",
   };
+  var reportoptions = {
+    width: 500,
+    height: 250,
+    interpolateNulls: true,
+    lineWidth: 1,
+    colors: ["#037385", "#350964", "#350964"],
+    hAxis: {
+      title: "Distance (in Km) ",
+      ticks: tickarr,
+    },
+    vAxis: {
+      title: "Elevation (in m)",
+    },
+    legend: "none",
+    seriesType: "line",
+    series: { 0: { type: "area" } },
+    curveType: "function",
+  };
 
   // Chart constructor for the main page of the website
   chart = new google.visualization.ComboChart(
@@ -473,4 +500,10 @@ function elevationchartptp() {
 
   // chart making visible, hidden when cancel ptp pressed
   document.querySelector(".ptp-elevation-chart").style.display = "block";
+  // report chart
+  var reportchart = new google.visualization.ComboChart(
+    document.getElementById("report_elevation_profile")
+  );
+  // draweing the chart
+  reportchart.draw(ptpjoinedData, reportoptions);
 }

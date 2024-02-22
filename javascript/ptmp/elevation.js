@@ -32,21 +32,19 @@ function plotElevation({ results }) {
   for (k = 0; k < results.length; k++) {
     yelev.push(results[k].elevation);
   }
-  drawChart(yelev);
+  drawChart(yelev, vals);
 }
 
-function drawChart(yelev) {
+function drawChart(yelev, value) {
   // emtying the chart container if it has any data
-  $(`#slave${vals}Elevation`).html("");
-  allElevation[vals].push(yelev);
-  var dist = parseFloat($(`#Distance${vals}1`).html());
+  $(`#slave${value}Elevation`).html("");
+  allElevation[value].push(yelev);
+  var dist = parseFloat($(`#Distance${value}1`).html());
   var rad = parseFloat(
-    document.getElementById(`Fresnel Radius${vals}1`).innerHTML
+    document.getElementById(`Fresnel Radius${value}1`).innerHTML
   );
   var htM = parseFloat($(`#masterHeight`).val());
-  var htS = parseFloat($(`#slave${vals}Height`).val());
-
-  console.log(dist, rad);
+  var htS = parseFloat($(`#slave${value}Height`).val());
 
   // x-ticks array
   var tickarr = [];
@@ -92,7 +90,7 @@ function drawChart(yelev) {
   }
 
   // saving lower ellipse for every slave in lowerellipsearray
-  lowerellipsearray[vals] = ellipsearray2;
+  lowerellipsearray[value] = ellipsearray2;
   // data array for the elevation
   elevarr = [];
   distarray = [];
@@ -106,34 +104,37 @@ function drawChart(yelev) {
     elevarr.push([distarray[i], yelev[i]]);
   }
   // this is array which collects all the distance and elevation array for the slaves
-  distelevation[vals] = elevarr;
+  distelevation[value] = elevarr;
 
   // LOS clear/unclear
 
   for (let i = 0; i < yelev.length; i++) {
     if (ellipsearray2[i][1] > yelev[i]) {
-      $(`#LOS${vals}1`).html("Yes");
-      $(`#reportSlave${vals}LOS0`).html("Yes");
-      $(`#reportSlave${vals}LOS1`).html("Yes");
-      $(`#LOS${vals}1`).css({ color: "green" });
+      $(`#LOS${value}1`).html("Yes");
+      $(`#reportSlave${value}LOS0`).html("Yes");
+      $(`#reportSlave${value}LOS1`).html("Yes");
+      $(`#LOS${value}1`).css({ color: "green" });
       // polyLine[vals].setOptions({ strokeColor: "Green" });
       // reportPolyline[vals].setOptions({ strokeColor: "Green" });
     } else {
-      $(`#LOS${vals}1`).html("No");
-      $(`#LOS${vals}1`).css({ color: "red" });
-      $(`#reportSlave${vals}LOS0`).html("No");
-      $(`#reportSlave${vals}LOS1`).html("No");
+      $(`#LOS${value}1`).html("No");
+      $(`#LOS${value}1`).css({ color: "red" });
+      $(`#reportSlave${value}LOS0`).html("No");
+      $(`#reportSlave${value}LOS1`).html("No");
       // polyLine[vals].setOptions({ strokeColor: "Red" });
       // reportPolyline[vals].setOptions({ strokeColor: "Red" });
       break;
     }
   }
   // checking if slave is in range then only we proceed to change the color of the line based on los
-  var slaverange = document.getElementById(`In Range${vals}1`).innerHTML;
+  var slaverange = document.getElementById(`In Range${value}1`).innerHTML;
   if (slaverange == "Yes") {
-    if ($(`#LOS${vals}1`).html() == "No") {
-      polyLine[vals].setOptions({ strokeColor: "Red" });
-      reportPolyline[vals].setOptions({ strokeColor: "Red" });
+    if ($(`#LOS${value}1`).html() == "No") {
+      polyLine[value].setOptions({ strokeColor: "Red" });
+      reportPolyline[value].setOptions({ strokeColor: "Red" });
+    } else if ($(`#LOS${value}1`).html() == "Yes") {
+      polyLine[value].setOptions({ strokeColor: "Green" });
+      reportPolyline[value].setOptions({ strokeColor: "Green" });
     }
   }
 
@@ -175,7 +176,7 @@ function drawChart(yelev) {
     [1]
   );
 
-  alljoineddata[vals] = joinedData2;
+  alljoineddata[value] = joinedData2;
 
   var options = {
     width: 400,
@@ -201,12 +202,20 @@ function drawChart(yelev) {
 
   // Chart constructor for the main page of the website
   chart = new google.visualization.ComboChart(
-    document.getElementById(`slave${vals}Elevation`)
+    document.getElementById(`slave${value}Elevation`)
   );
 
   chart.draw(joinedData2, options);
-  $(`#slave${vals}Obstruction`).css("display", "block");
+  $(`#slave${value}Obstruction`).css("display", "block");
   // $(`#slave${vals}ReportElevation`).html($(`#slave${vals}Elevation`).html());
   yelevation = [];
-  availability(vals);
+  availability(value);
+  var numOfSlaves = $(`#numberOfSlaves`).val();
+  var lastSlaveThroughput = $(`#Throughput${eval(numOfSlaves)}1`).html();
+  if (lastSlaveThroughput != "") {
+    checkAvailability();
+    ptmpMasterThroughput();
+    ptmpSlaveThroughput();
+    ULDLThroughput();
+  }
 }

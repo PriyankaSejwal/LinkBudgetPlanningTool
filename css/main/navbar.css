@@ -202,12 +202,12 @@ button {
 }
 
 .getdemobtn {
-  width: 120px;
+  /* width: 120px; */
   text-align: center;
-  border-radius: 12px;
+  border-radius: 10px;
   background-color: #350964;
   color: #fff;
-  padding: 5px;
+  padding: 8px 10px;
   line-height: 20px;
   font-family: "Roboto", sans-serif;
   display: block;
@@ -215,7 +215,7 @@ button {
   font-weight: 400;
 }
 .getdemobtn:hover {
-  background-color: #000;
+  background-color: #7107aa;
   color: #fff;
 }
 .show {
@@ -509,7 +509,7 @@ button {
 }
 @media screen and (max-width: 1390px) {
   .getdemobtn {
-    width: 115px;
+    /* width: 115px; */
     font-size: 14px;
   }
 }
@@ -520,16 +520,18 @@ button {
 }
 @media screen and (max-width: 750px) {
   .getdemobtn {
-    width: 90px;
-    font-size: 10px;
+    /* width: 90px; */
+    font-size: 12px;
     line-height: 15px;
   }
 }
 @media screen and (max-width: 600px) {
   .getdemobtn {
-    width: 85px;
+    /* width: 85px; */
+    padding: 4px 8px;
     font-size: 10px;
     line-height: 13px;
+    border-radius: 2px;
   }
 }
 @media screen and (max-width: 750px) {

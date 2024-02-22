@@ -10,8 +10,12 @@ document
   .querySelector("#obstruction-close-btn")
   .addEventListener("click", function () {
     document.querySelector(".obstructionPopUp").style.display = "none";
-
-    updateElevationChart();
+    var obstructionList = $("#obsUL").html();
+    if (obstructionList == "") {
+      elevationchartptp();
+    } else {
+      updateElevationChart();
+    }
   });
 
 // function which adds new obstruction data into the list on clickikg th ADD button in the obstruction table
@@ -96,7 +100,13 @@ function gettingObsDataFromUL() {
 
 // adding obstruction data to the chart and displaying the chart
 function updateElevationChart() {
+  var dist = $(`#linkDistance`).html();
   var data4 = gettingObsDataFromUL();
+  var tickarr = [];
+  var tickSize = dist / 4;
+  for (var i = 0; i <= dist; i += tickSize) {
+    tickarr.push(i.toFixed(2));
+  }
 
   obstructionJoined = google.visualization.data.join(
     ptpjoinedData,
@@ -106,7 +116,6 @@ function updateElevationChart() {
     [1, 2, 3],
     [1]
   );
-  console.log(obstructionJoined);
 
   // we have obstruction in the chart so checking if obstruction is clear of the fresnel zone
   for (let k = 0; k < obsArray.length; k++) {
@@ -116,6 +125,7 @@ function updateElevationChart() {
       document.getElementById("reportlos").innerHTML = "No";
       document.getElementById("los").style.color = "Red";
       ptppolyline.setOptions({ strokeColor: "Red" });
+      reportpolyline.setOptions({ strokeColor: "Red" });
       document.querySelector("#availabilityValue").style.display = "none";
       document.querySelector("#msg").style.display = "table-cell";
       document.getElementById("reportlinkAvailability").innerHTML = "No";
@@ -125,8 +135,11 @@ function updateElevationChart() {
       document.getElementById("reportlos").innerHTML = "Yes";
       document.getElementById("los").style.color = "Green";
       ptppolyline.setOptions({ strokeColor: "Green" });
+      reportpolyline.setOptions({ strokeColor: "Green" });
       document.querySelector("#availabilityValue").style.display = "table-cell";
       document.querySelector("#msg").style.display = "none";
+      document.getElementById("reportlinkAvailability").innerHTML = "Yes";
+      $("#reportlinkAvailability").html($("#linkAvailability").html());
     }
   }
 
@@ -147,6 +160,24 @@ function updateElevationChart() {
     seriesType: "line",
     series: { 0: { type: "area" }, 3: { type: "bars" } },
   };
+  var reportoptions = {
+    width: 500,
+    height: 250,
+    interpolateNulls: true,
+    lineWidth: 1,
+    colors: ["#037385", "#350964", "#350964", "#ff0000"],
+    hAxis: {
+      title: "Distance (in Km) ",
+      ticks: tickarr,
+    },
+    vAxis: {
+      title: "Elevation (in m)",
+    },
+    legend: "none",
+    seriesType: "line",
+    series: { 0: { type: "area" }, 3: { type: "bars" } },
+    curveType: "function",
+  };
 
   // Chart constructor for the main page of the website
   chart = new google.visualization.ComboChart(
@@ -155,6 +186,13 @@ function updateElevationChart() {
 
   // drawing the Main chart
   chart.draw(obstructionJoined, options);
+  // report chart
+  var reportchart = new google.visualization.ComboChart(
+    document.getElementById("report_elevation_profile")
+  );
+
+  // drawing the report chart
+  reportchart.draw(obstructionJoined, reportoptions);
 }
 
 function ObsChartWithHt() {
@@ -223,25 +261,6 @@ function ObsChartWithHt() {
     arr.push([distarray[i], yelevptp[i]]);
   }
 
-  //  Checking for clear Line of Sight
-  // for (i = 0; i < yelevptp.length; i++) {
-  //   if (ellipsearray2[i][1] > yelevptp[i]) {
-  //     document.getElementById("los").innerHTML = "Yes";
-  //     document.getElementById("reportlos").innerHTML = "Yes";
-  //     document.getElementById("los").style.color = "Green";
-  //     ptppolyline.setOptions({ strokeColor: "Green" });
-  //     document.querySelector("#availabilityValue").style.display = "table-cell";
-  //     document.querySelector("#msg").style.display = "none";
-  //   } else {
-  //     document.getElementById("los").innerHTML = "No";
-  //     document.getElementById("reportlos").innerHTML = "No";
-  //     document.getElementById("los").style.color = "Red";
-  //     ptppolyline.setOptions({ strokeColor: "Red" });
-  //     document.querySelector("#availabilityValue").style.display = "none";
-  //     document.querySelector("#msg").style.display = "table-cell";
-  //     break;
-  //   }
-  // }
   // we have obstruction in the chart so checking if obstruction is clear of the fresnel zone
   for (let k = 0; k < obsArray.length; k++) {
     index = obsindex[k];
@@ -250,6 +269,7 @@ function ObsChartWithHt() {
       document.getElementById("reportlos").innerHTML = "No";
       document.getElementById("los").style.color = "Red";
       ptppolyline.setOptions({ strokeColor: "Red" });
+      reportpolyline.setOptions({ strokeColor: "Red" });
       document.querySelector("#availabilityValue").style.display = "none";
       document.querySelector("#msg").style.display = "table-cell";
       document.getElementById("reportlinkAvailability").innerHTML = "No";
@@ -259,8 +279,10 @@ function ObsChartWithHt() {
       document.getElementById("reportlos").innerHTML = "Yes";
       document.getElementById("los").style.color = "Green";
       ptppolyline.setOptions({ strokeColor: "Green" });
+      reportpolyline.setOptions({ strokeColor: "Green" });
       document.querySelector("#availabilityValue").style.display = "table-cell";
       document.querySelector("#msg").style.display = "none";
+      $("#reportlinkAvailability").html($("#linkAvailability").html());
     }
   }
   //  Calculating the Antenna Tilt / Vertical Angle and populating them in the Link Installation Report
@@ -334,6 +356,23 @@ function ObsChartWithHt() {
     seriesType: "line",
     series: { 0: { type: "area" }, 3: { type: "bars" } },
   };
+  var reportoptions = {
+    width: 500,
+    height: 250,
+    interpolateNulls: true,
+    lineWidth: 1,
+    colors: ["#037385", "#350964", "#350964", "#ff0000"],
+    hAxis: {
+      title: "Distance (in Km) ",
+    },
+    vAxis: {
+      title: "Elevation (in m)",
+    },
+    legend: "none",
+    seriesType: "line",
+    series: { 0: { type: "area" }, 3: { type: "bars" } },
+    curveType: "function",
+  };
 
   // Chart constructor for the main page of the website
   chart = new google.visualization.ComboChart(
@@ -342,6 +381,13 @@ function ObsChartWithHt() {
 
   // drawing the Main chart
   chart.draw(obstructionJoined, options);
+
+  // report chart
+  var reportchart = new google.visualization.ComboChart(
+    document.getElementById("report_elevation_profile")
+  );
+  // drawing the chart
+  reportchart.draw(obstructionJoined, reportoptions);
 
   // chart making visible, hidden when cancel ptp pressed
   //  document.querySelector(".elevation-chart").style.display = "block";
